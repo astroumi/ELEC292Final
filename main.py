@@ -1,12 +1,17 @@
-#hello world
-#test
 import h5py
 import pandas as pd
 import numpy as np
+import os
 
 print ("fuuhhh")
 
-with h5py.File('data') as hdf:
+#Setup names for paths
+base_dir = os.path.dirname(os.path.abspath(__file__))
+data_folder = os.path.join(base_dir, "data")  # This is your main 'data' folder
+h5_path = os.path.join(base_dir, "ELEC292_Project.h5")
+
+#Open the folder at the end of the h5_path in append mode 'a'
+with h5py.File(h5_path, 'a') as hdf:
 
     #Create the main three data groups
     raw_group = hdf.require_group('Raw_Data')
@@ -22,7 +27,5 @@ with h5py.File('data') as hdf:
 
     member_group = raw_group.require_group('Larry')
 
-
-https://code-with-me.global.jetbrains.com/QXD5okIZCM-0wugTX5MmSw
 
 #love kip<3
