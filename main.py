@@ -22,7 +22,7 @@ with h5py.File(h5_path, 'a') as hdf:
     segmented_group = hdf.require_group('Segmented_Data')
 
     #Fill group member data into raw_group
-    for member_name in ['kipras', 'umair', 'larry']:
+    for member_name in ['Kip', 'Umair', 'Larry']:
         #Creates path to the named folder
         member_path = os.path.join(data_folder, member_name)
         #Creates name for the member_group
@@ -37,14 +37,23 @@ with h5py.File(h5_path, 'a') as hdf:
 
             for filename in os.listdir(activity_path):
                 if filename.endswith(".csv"):
+                    #Creates a path to the file
                     file_path = os.path.join(activity_path, filename)
+                    #Read the CSV file into Pandas DataFrame
+                    df = pd.read_csv(file_path)
+                    #Converth the data into a Numpy array
+                    data_matrix = df.to_numpy()
+                    #Remove the .csv for cleanliness
+                    dataset_name = filename.replace(".csv", "")
+                    #Delete duplicates
+                    if dataset_name in activity_group:
+                        del activity_group[dataset_name]
+                    #Save the dataset to the activity subgroup
+                    activity_group.create_dataset(dataset_name, data=data_matrix)
 
-            #Check if path exists
-            if os.path.exists(member_path):
-                print ("yay")
-                for filename in os.listdir(member_path):
-                    if filename.endswith(".csv"):
-                        if filename
+
+
+
 
 
 
