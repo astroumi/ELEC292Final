@@ -28,8 +28,24 @@ with h5py.File(h5_path, 'a') as hdf:
         #Creates name for the member_group
         member_group = raw_group.require_group(member_name)
 
-        if os.path.exists(member_path):
-            print ("yay")
+        #Loop through activities
+        for activity in ['jumping', 'walking']:
+            #Creates path to activity folder
+            activity_path = os.path.join(data_folder, member_name, activity)
+            #Creates activity folder
+            activity_group = member_group.require_group(activity)
+
+            for filename in os.listdir(activity_path):
+                if filename.endswith(".csv"):
+                    file_path = os.path.join(activity_path, filename)
+
+            #Check if path exists
+            if os.path.exists(member_path):
+                print ("yay")
+                for filename in os.listdir(member_path):
+                    if filename.endswith(".csv"):
+                        if filename
+
 
 
 
