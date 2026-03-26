@@ -56,10 +56,21 @@ with h5py.File(h5_path, 'a') as hdf:
         #Creates path to the named folder
         member_path = os.path.join(data_folder, member_name)
         #Creates name for the member_group
-        member_group = raw_group.require_group(member_name)
+        member_group = processed_group.require_group(member_name)
 
+        #Loop through activities
+        for activity in ['jumping', 'walking']:
+            #Creates path to activity folder
+            activity_path = os.path.join(member_path, activity)
+            #Creates activity folder
+            activity_group = member_group.require_group(activity)
 
-
+    #Segmented Data Group Set-up
+    for type in ['Train', 'Test']:
+        #Creates path to type folder
+        type_path = os.path.join(member_path, type)
+        #Creates type folder
+        type_path = member_group.require_group(type)
 
 
 
