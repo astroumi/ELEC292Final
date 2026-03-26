@@ -31,7 +31,7 @@ with h5py.File(h5_path, 'a') as hdf:
         #Loop through activities
         for activity in ['jumping', 'walking']:
             #Creates path to activity folder
-            activity_path = os.path.join(data_folder, member_name, activity)
+            activity_path = os.path.join(member_path, activity)
             #Creates activity folder
             activity_group = member_group.require_group(activity)
 
@@ -50,13 +50,13 @@ with h5py.File(h5_path, 'a') as hdf:
                         del activity_group[dataset_name]
                     #Save the dataset to the activity subgroup
                     activity_group.create_dataset(dataset_name, data=data_matrix)
-    #
-    # #Preprocessed Data Group Set-up
-    # for member_name in ['kip', 'umair', 'larry']:
-    #     #Creates path to the named folder
-    #     member_path = os.path.join(data_folder, member_name)
-    #     #Creates name for the member_group
-    #     member_group = raw_group.require_group(member_name)
+
+    #Preprocessed Data Group Set-up
+    for member_name in ['kip', 'umair', 'larry']:
+        #Creates path to the named folder
+        member_path = os.path.join(data_folder, member_name)
+        #Creates name for the member_group
+        member_group = raw_group.require_group(member_name)
 
 
 
