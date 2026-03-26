@@ -7,8 +7,8 @@ print ("fuuhhh")
 
 #Setup names for paths
 base_dir = os.path.dirname(os.path.abspath(__file__))
-data_folder = os.path.join(base_dir, "data")  # This is your main 'data' folder
-h5_path = os.path.join(base_dir, "ELEC292_Project.h5")
+data_folder = os.path.join(base_dir, "data")  #keeps path constant between computers
+h5_path = os.path.join(base_dir, "ELEC292_Project.h5") #same but for h5 file
 
 #Open the folder at the end of the h5_path in append mode 'a'
 with h5py.File(h5_path, 'a') as hdf:
