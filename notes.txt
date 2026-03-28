@@ -3,3 +3,10 @@ Acceleration x (m/s^2)
 Acceleration y (m/s^2)
 Acceleration z (m/s^2)
 Absolute acceleration (m/s^2)
+
+
+git rm --cached file.html
+git rm --cached -r folder/
+git add .gitignore
+git commit -m "Ignore local files"
+git push
