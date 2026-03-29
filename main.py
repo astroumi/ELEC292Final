@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import os
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def preprocessing(raw_data):
 
@@ -37,9 +38,9 @@ def preprocessing(raw_data):
     return processed_df
 
 #Function to make it easier to plot straight HDF5 datasets
-def plot_hdf5_dataset(h5_file_path, internal_path, title="Accelerometer Data"):
+def plot_hdf5_dataset(internal_path, title="Accelerometer Data"):
     #Pull data from HDF5
-    with h5py.File(h5_file_path, 'r') as hdf:
+    with h5py.File(h5_path, 'r') as hdf:
         #Pull raw numbers
         data = hdf[internal_path][:]
         #Create the data frame
@@ -142,7 +143,42 @@ def compare_raw_vs_processed(h5_path, raw_path, proc_path, title="Comparison"):
     plt.tight_layout(rect=[0, 0, 1, 0.96])
     plt.show()
 
+#Makes it easier to plot HDF5 files as 3D trajectories
+def plot_hdf5_3d(internal_path, title=""):
 
+    with h5py.File(h5_path, 'r') as hdf:
+        #Pulls raw numbers
+        data = hdf[internal_path][:]
+        #Creates data frame
+        df = pd.DataFrame(data)
+        #Calls main 3D trajectory plot funciton
+        plot_3d_trajectory(df, title=title if title else internal_path)
+
+#Plot acceleration data as a 3D trajectory
+def plot_3d_trajectory(df, title="3D Acceleration Path"):
+    fig = plt.figure(figsize=(10, 8))
+    ax = fig.add_subplot(111, projection='3d')
+
+    #Assign colums by position
+    time = df.iloc[:, 0]
+    x = df.iloc[:, 1]
+    y = df.iloc[:, 2]
+    z = df.iloc[:, 3]
+
+    #Create a scatter plot where the color changes over time
+    scatter = ax.scatter(x, y, z, c=time, cmap='viridis', s=5, alpha = 0.6)
+
+    #Add a color bar to show time progressoin
+    cbar = plt.colorbar(scatter, ax=ax, pad=0.1)
+    cbar.set_label('Time Progression (s)')
+
+    #Labels
+    ax.set_xlabel('X Acceleration (m/s²)')
+    ax.set_ylabel('Y Acceleration (m/s²)')
+    ax.set_zlabel('Z Acceleration (m/s²)')
+
+    fig.suptitle(title, fontsize=15, fontweight='bold')
+    plt.show()
 
 
 print ("fuuhhh")
@@ -220,11 +256,11 @@ print("Preprocessing complete.")
 #Test visualization
 with h5py.File(h5_path, 'r') as hdf:
     #Plot processed
-    plot_hdf5_dataset(h5_path, '/Processed_Data/kip/walking/kip_walking_backpack')
+    plot_hdf5_dataset('/Processed_Data/kip/walking/kip_walking_backpack')
     #Plot processed
-    plot_hdf5_dataset(h5_path, '/Processed_Data/kip/jumping/kip_jumping_backpack')
+    plot_hdf5_dataset('/Processed_Data/kip/jumping/kip_jumping_backpack')
     #Plot Raw
-    plot_hdf5_dataset(h5_path, '/Raw_Data/kip/walking/kip_walking_backpack')
+    plot_hdf5_dataset('/Raw_Data/kip/walking/kip_walking_backpack')
 
     file_path = os.path.join(base_dir, 'data_split', 'kip_jumping_backpack_1.csv')
     plot_accel_data(pd.read_csv(file_path))
@@ -236,8 +272,8 @@ with h5py.File(h5_path, 'r') as hdf:
     # Run the comparison
     compare_raw_vs_processed(h5_path, raw_int_path, proc_int_path, title="Kip Jumping: Filter Verification")
 
-
-
+    # The simple way (using your existing function)
+    plot_hdf5_3d('Processed_Data/kip/jumping/kip_jumping_backpack')
 
 
     # #Segmented Data Group Set-up
