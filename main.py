@@ -14,13 +14,9 @@ def preprocessing(raw_data):
     df_axes = pd.DataFrame(raw_data[:, 1:4], columns=['X', 'Y', 'Z'])
     df_axes = df_axes.interpolate(method='linear', limit_direction='both')
 
-    #Remove offset from gravity
-    #Subtracts the mean from each axis to center the raw data around 0 m/s^2
-    no_gravity = df_axes.values - np.mean(df_axes.values, axis=0)
-
     #Filter out high frequency noise with moving average
     #A window of size 5 is used
-    df_smoothed = pd.DataFrame(no_gravity, columns=['X', 'Y', 'Z'])
+    df_smoothed = pd.DataFrame(df_axes, columns=['X', 'Y', 'Z'])
     df_smoothed = df_smoothed.rolling(window=5, center=True, min_periods=1).mean()
 
     #Calculate magnitude of acceleration from smooth X, Y, Z
