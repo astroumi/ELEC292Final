@@ -6,7 +6,6 @@ Assumes fs=100Hz → 5s=500 lines.
 """
 
 import pandas as pd
-import numpy as np
 from pathlib import Path
 
 
