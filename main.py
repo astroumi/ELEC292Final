@@ -179,6 +179,8 @@ def plot_3d_trajectory(df, title="3D Acceleration Path"):
 
 print ("fuuhhh")
 
+############################ ADDING DATA TO HDF
+
 #Setup names for paths
 #Find the folder where the script is
 base_dir = os.path.dirname(os.path.abspath(__file__))
@@ -224,6 +226,8 @@ with h5py.File(h5_path, 'a') as hdf:
                         del activity_group[dataset_name]
                     #Save the dataset to the activity subgroup
                     activity_group.create_dataset(dataset_name, data=data_matrix)
+
+################## PREPROCESSING ALL HDF DATA
 
     #Preprocessed Data Group Set-up
     for member_name in ['kip', 'umair', 'larry']:
@@ -278,9 +282,6 @@ with h5py.File(h5_path, 'r') as hdf:
     #     type_path = os.path.join(member_path, type)
     #     #Creates type folder
     #     type_path = member_group.require_group(type)
-
-
-
 
 
 

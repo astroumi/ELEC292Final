@@ -10,3 +10,8 @@ git rm --cached -r .idea
 git add .gitignore
 git commit -m "Ignore local files"
 git push
+
+
+- make preprocessing work on raw 5s data for finding a good window size
+- make split function work within hdf to apply to processed data (to be then used for training)
+- split code into multiple py files
