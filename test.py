@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 # ==========================================
 # CONFIGURATION
 # ==========================================
-FILENAME = 'kip_jumping_backpack_1.csv'  # Change to your split filename
-WINDOW_SIZES = [3, 5, 10, 20]
+FILENAME = 'umair_jumping_hand_1.csv'  # Change to your split filename
+WINDOW_SIZES = [3, 4, 5, 6]
 
 
 def preprocessing_test(raw_data, window):
@@ -33,7 +33,7 @@ def preprocessing_test(raw_data, window):
 def run_matrix_test():
     # Setup Paths
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(base_dir, 'data_split', FILENAME)
+    file_path = os.path.join(base_dir, 'data_split', 'jumping', FILENAME)
 
     if not os.path.exists(file_path):
         print(f"Error: {FILENAME} not found in 'data_split' folder.")
