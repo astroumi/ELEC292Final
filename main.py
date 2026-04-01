@@ -249,27 +249,27 @@ with h5py.File(h5_path, 'a') as hdf:
 
 print("Preprocessing complete.")
 
-#Test visualization
-with h5py.File(h5_path, 'r') as hdf:
-    #Plot processed
-    plot_hdf5_dataset('/Processed_Data/kip/walking/kip_walking_backpack')
-    #Plot processed
-    plot_hdf5_dataset('/Processed_Data/kip/jumping/kip_jumping_backpack')
-    #Plot Raw
-    plot_hdf5_dataset('/Raw_Data/kip/walking/kip_walking_backpack')
-
-    file_path = os.path.join(base_dir, 'data_split', 'kip_jumping_backpack_1.csv')
-    plot_accel_data(pd.read_csv(file_path))
-
-    # Define your paths
-    raw_int_path = 'Raw_Data/kip/jumping/kip_jumping_backpack'
-    proc_int_path = 'Processed_Data/kip/jumping/kip_jumping_backpack'
-
-    # Run the comparison
-    compare_raw_vs_processed(h5_path, raw_int_path, proc_int_path, title="Kip Jumping: Filter Verification")
-
-    # The simple way (using your existing function)
-    plot_hdf5_3d('Processed_Data/kip/jumping/kip_jumping_backpack')
+# #Test visualization
+# with h5py.File(h5_path, 'r') as hdf:
+#     #Plot processed
+#     plot_hdf5_dataset('/Processed_Data/kip/walking/kip_walking_backpack')
+#     #Plot processed
+#     plot_hdf5_dataset('/Processed_Data/kip/jumping/kip_jumping_backpack')
+#     #Plot Raw
+#     plot_hdf5_dataset('/Raw_Data/kip/walking/kip_walking_backpack')
+#
+#     file_path = os.path.join(base_dir, 'data_split', 'kip_jumping_backpack_1.csv')
+#     plot_accel_data(pd.read_csv(file_path))
+#
+#     # Define your paths
+#     raw_int_path = 'Raw_Data/kip/jumping/kip_jumping_backpack'
+#     proc_int_path = 'Processed_Data/kip/jumping/kip_jumping_backpack'
+#
+#     # Run the comparison
+#     compare_raw_vs_processed(h5_path, raw_int_path, proc_int_path, title="Kip Jumping: Filter Verification")
+#
+#     # The simple way (using your existing function)
+#     plot_hdf5_3d('Processed_Data/kip/jumping/kip_jumping_backpack')
 
 
     # #Segmented Data Group Set-up
