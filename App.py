@@ -4,7 +4,8 @@ from tkinter import filedialog
 import joblib
 import numpy as np
 import pandas as pd
-from Extraction import extract_features
+# from Extraction import extract_features
+# from split import split_csv_in_memory
 
 #Global Variables
 selected_filename = ""
@@ -116,13 +117,13 @@ window.geometry('500x500')
 window.configure(bg = 'lightblue')
 
 #Title
-title_label = tk.Label(master=window, text='Walking or Jumping???', font=('Times New Roman bold', 24), fg = 'gray', bg='lightblue')
+title_label = tk.Label(master=window, text='Walking or Jumping???', font=('Times New Roman bold', 24), fg = 'purple', bg='lightblue')
 title_label.pack()
 
 #Input field
 input_frame = tk.Frame(master=window, bg = 'lightblue', bd=0, highlightthickness = 0)
-file_button = tk.Button(master = input_frame, text = 'File', command = open_file, highlightthickness = 0, borderwidth = 1)
-check_button = tk.Button(master = input_frame, text = 'Check', command = check, highlightthickness = 0, borderwidth = 1)
+file_button = tk.Button(master = input_frame, text = 'File', font=('Times New Roman', 14), command = open_file, highlightthickness = 0, borderwidth = 1, width = 6, height = 1)
+check_button = tk.Button(master = input_frame, text = 'Check', font=('Times New Roman', 18), command = check, highlightthickness = 0, borderwidth = 1, width = 10, height = 2)
 file_button.pack(padx = 10, pady = 2)
 check_button.pack(padx = 10, pady = 2)
 check_button.pack()

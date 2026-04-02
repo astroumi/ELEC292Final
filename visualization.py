@@ -145,3 +145,41 @@ def plot_3d_trajectory(df, title="3D Acceleration Path"):
 
     fig.suptitle(title, fontsize=15, fontweight='bold')
     plt.show()
+
+#Plot app results
+def plot_app_results(csv_path, predictions, window_sec=5):
+    #Load the original CSV
+    df = pd.read_csv(csv_path)
+
+    #Set up layout
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(12,8), sharex=True)
+
+    # Assign data by position
+    time_data = df.iloc[:, 0]
+    mag_data = df.iloc[:, 4]
+
+    #Plot the raw magnitude signal on top
+    ax1.plot(time_data, mag_data, color='purple', label='Magnitude')
+    ax1.set_ylabel('Magnitude (m/s²)')
+    ax1.set_xlabel('Time (s)')
+    ax1.set_title('Magnitude of acceleration vs time')
+
+    ax1.tick_params(labelbottom=True)
+    ax1.grid(True, alpha=0.3)
+    ax1.xaxis.set_major_locator(plt.MaxNLocator(nbins=10))
+
+    #Plot the predictions as a step plot of walking or jumping over time
+
+    #Build the time and label arrays
+    times = [i * window_sec for i in range(len(predictions))]
+    labels = [int(pred) for pred in predictions]
+
+    #Plot as a step chart
+    ax2.step(times, labels, where='post')
+
+    #Set custom ytick labels
+    ax2.set_yticks([0, 1])
+    ax2.set_yticklabels(['Walking', 'Jumping'])
+
+    plt.tight_layout()
+    plt.show()

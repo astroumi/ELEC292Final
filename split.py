@@ -2,10 +2,10 @@ from pathlib import Path
 from hdf import *
 
 
-#I commented these out for now
-# #### Defines which split to run on runtime
-# split_csv = False
-# split_hdf = True
+
+#### Defines which split to run on runtime
+split_csv = False
+split_hdf = True
 
 def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
     """Split one CSV → multiple 5s CSVs"""
