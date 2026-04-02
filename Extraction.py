@@ -88,6 +88,8 @@ scaler.fit(features_train)
 features_train_scaled = scaler.transform(features_train)
 features_test_scaled = scaler.transform(features_test)
 
+#### normalized features array stored as a variable and NOT in HDF as of yet
+
 #Print to check that it worked
 print("Normalization Completed")
 print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
