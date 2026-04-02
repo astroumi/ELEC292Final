@@ -1,9 +1,11 @@
 from pathlib import Path
 from hdf import *
 
-#### Defines which split to run on runtime
-split_csv = False
-split_hdf = True
+
+#I commented these out for now
+# #### Defines which split to run on runtime
+# split_csv = False
+# split_hdf = True
 
 def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
     """Split one CSV → multiple 5s CSVs"""
@@ -43,7 +45,10 @@ def split_csv_in_memory(csv_path, fs=100, window_sec=5):
 
     windows = [] #creates windows array
 
-    for i in range(n_samples):
+    #Compute number of windows
+    n_windows = n_samples // window_len
+
+    for i in range(n_windows):
         start = i * window_len
         end = start + window_len
         windows_df = df.iloc[start:end].reset_index(drop=True)
