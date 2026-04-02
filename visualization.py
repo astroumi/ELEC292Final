@@ -174,12 +174,25 @@ def plot_app_results(csv_path, predictions, window_sec=5):
     times = [i * window_sec for i in range(len(predictions))]
     labels = [int(pred) for pred in predictions]
 
+    time_start = time_data.iloc[0]
+    times = [time_start + i * window_sec for i in range(len(predictions))]
+
     #Plot as a step chart
     ax2.step(times, labels, where='post')
 
     #Set custom ytick labels
     ax2.set_yticks([0, 1])
     ax2.set_yticklabels(['Walking', 'Jumping'])
+
+
+    #Fill the step plot with colors to make reading easier
+    for i, pred in enumerate(predictions):
+        color = 'lightgreen' if pred == 0 else 'lightcoral'
+        ax2.axvspan(times[i], times[i] + window_sec, alpha=0.3, color=color)
+
+    ax2.set_xlabel('Time (s)')
+    ax2.set_title('Predicted Activity over Time')
+    ax2.grid(True, alpha=0.3)
 
     plt.tight_layout()
     plt.show()
