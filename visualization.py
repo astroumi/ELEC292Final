@@ -171,9 +171,7 @@ def plot_app_results(csv_path, predictions, window_sec=5):
     #Plot the predictions as a step plot of walking or jumping over time
 
     #Build the time and label arrays
-    times = [i * window_sec for i in range(len(predictions))]
     labels = [int(pred) for pred in predictions]
-
     time_start = time_data.iloc[0]
     times = [time_start + i * window_sec for i in range(len(predictions))]
 

@@ -4,6 +4,9 @@ from tkinter import filedialog
 import joblib
 import numpy as np
 import pandas as pd
+
+from visualization import plot_app_results
+
 # from Extraction import extract_features
 # from split import split_csv_in_memory
 
@@ -69,6 +72,9 @@ def check ():
 
         #Save results to CSV
         save_results_to_csv(predictions)
+
+        #Plot results
+        plot_app_results(selected_filename, predictions)
 
     except Exception as e:
         print(f"Something went wrong: {e}")
