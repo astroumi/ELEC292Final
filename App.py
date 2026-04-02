@@ -41,7 +41,7 @@ def check ():
     try:
         answer_string.set("Processing...")
 
-        #Split the data into 5 second windows
+        #Split the data into 5 second windows make a windows list out of them
         windows = split_csv_in_memory(selected_filename)
 
         #Extract features
@@ -51,23 +51,61 @@ def check ():
             all_features.append(features)
 
         #Normalize the data
+        #Converts all_features into a 2D numpy array and normalizes every feature using fitted scaler
         features_scaled = scaler.transform(np.array(all_features))
 
-        #Check
-        prediction = model.predict(features_scaled)
+        #Run the classifier on every window and add 0s or 1s to a predictions array
+        predictions = model.predict(features_scaled)
 
         #Count results
-        walking_count = sum(prediction == 0)
-        jumping_count = sum(prediction == 1)
+        walking_count = sum(predictions == 0)
+        jumping_count = sum(predictions == 1)
 
         if walking_count > jumping_count:
             answer_string.set("walking!!!")
         else:
             answer_string.set("jumping!!!")
+
+        #Save results to CSV
+        save_results_to_csv(predictions)
+
     except Exception as e:
         print(f"Something went wrong: {e}")
         answer_string.set("Error - check console")
     return None
+
+#Save predictions to a CSV file
+def save_results_to_csv(predictions, window_sec=5):
+    rows = []
+    #Loop through every time frame and add it to the rows list
+    for i, pred in enumerate(predictions):
+        window_num = i + 1
+        start_time = i * window_sec
+        end_time = start_time + window_sec
+        label = 'walking' if pred == 0 else 'jumping'
+        rows.append({
+            'window': window_num,
+            'time': start_time,
+            'end_time': end_time,
+            'label': label
+        })
+
+    #Convert list of dictionaries into a pandas dataframe
+    output_df = pd.DataFrame(rows)
+    #Allows user to choose where to save the file and what to name it
+    output_path = filedialog.asksaveasfilename(
+        #Automatically adds .csv to the file name if not added
+        defaultextension='.csv',
+        #Restricts the file browser to only show CSV files so users can't save it to the wrong format
+        filetypes=[('CSV files', '*.csv')]
+    )
+
+    #Saves the dataframe to a csv in the output path
+    if output_path:
+        output_df.to_csv(output_path, index=False)
+        print(f"Results saved to {output_path}")
+
+
 
 
 
@@ -104,47 +142,3 @@ answer_label.pack(pady = 20)
 #run
 window.mainloop()
 
-
-
-
-
-
-
-def convert ():
-    mile_input = entry_Int.get()
-    km_output = mile_input * 1.60934
-    output_string.set(km_output)
-
-
-#window
-window = tk.Tk()
-window.title('Demo')
-window.geometry('300x150')
-
-#title
-title_label = ttk.Label(master=window, text='Miles to kilometers', font=('Times New Roman bold', 24))
-#places label on the window
-title_label.pack()
-
-#input field
-input_frame = ttk.Frame(master=window)
-entry_Int = tk.IntVar()
-entry = ttk.Entry(master=input_frame, textvariable=entry_Int)
-button = ttk.Button(master = input_frame, text = 'Convert', command = convert)
-entry.pack(side = 'left', padx = 10)
-button.pack(side = 'left')
-input_frame.pack(pady = 10)
-
-#output
-output_string = tk.StringVar()
-output_label = ttk.Label(master=window,
-                         text = 'Output',
-                         font=('Times New Roman', 24),
-                         textvariable = output_string)
-output_label.pack()
-
-button.pack()
-input_frame.pack()
-
-#run
-window.mainloop()
