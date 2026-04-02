@@ -4,8 +4,9 @@ from tkinter import filedialog
 import joblib
 import numpy as np
 import pandas as pd
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
-from visualization import plot_app_results
+from visualization import plot_app_results_embedded
 
 # from Extraction import extract_features
 # from split import split_csv_in_memory
@@ -74,7 +75,7 @@ def check ():
         save_results_to_csv(predictions)
 
         #Plot results
-        plot_app_results(selected_filename, predictions)
+        plot_app_results_embedded(selected_filename, predictions, window)
 
     except Exception as e:
         print(f"Something went wrong: {e}")
@@ -119,32 +120,119 @@ def save_results_to_csv(predictions, window_sec=5):
 #Window
 window = tk.Tk()
 window.title('ELEC292 Final Project')
-window.geometry('500x500')
-window.configure(bg = 'lightblue')
+window.geometry('560x680')
+window.configure(bg='#0d0d0d')
+window.resizable(False, False)
 
-#Title
-title_label = tk.Label(master=window, text='Walking or Jumping???', font=('Times New Roman bold', 24), fg = 'purple', bg='lightblue')
-title_label.pack()
+#═══════════════════════════════════════
+#  HEADER
+#═══════════════════════════════════════
+header = tk.Frame(master=window, bg='#0d0d0d')
+header.pack(fill='x', pady=(30,0))
 
-#Input field
-input_frame = tk.Frame(master=window, bg = 'lightblue', bd=0, highlightthickness = 0)
-file_button = tk.Button(master = input_frame, text = 'File', font=('Times New Roman', 14), command = open_file, highlightthickness = 0, borderwidth = 1, width = 6, height = 1)
-check_button = tk.Button(master = input_frame, text = 'Check', font=('Times New Roman', 18), command = check, highlightthickness = 0, borderwidth = 1, width = 10, height = 2)
-file_button.pack(padx = 10, pady = 2)
-check_button.pack(padx = 10, pady = 2)
-check_button.pack()
-input_frame.pack(pady = 10)
+tk.Label(master=header, text='M O T I O N',
+         font=('Helvetica', 38, 'bold'),
+         fg='#ff003c', bg='#0d0d0d').pack()
 
-#File output
+tk.Label(master=header, text='C L A S S I F I E R',
+         font=('Helvetica', 16),
+         fg='#ff003c', bg='#0d0d0d').pack()
+
+tk.Label(master=header, text='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+         fg='#ff003c', bg='#0d0d0d').pack(pady=8)
+
+tk.Label(master=header, text='a r e   y o u   w a l k i n g   o r   j u m p i n g ?',
+         font=('Helvetica', 9),
+         fg='#555555', bg='#0d0d0d').pack()
+
+#═══════════════════════════════════════
+#  CARD
+#═══════════════════════════════════════
+card_border = tk.Frame(master=window, bg='#ff003c', padx=2, pady=2)
+card_border.pack(pady=25, padx=40, fill='x')
+
+card = tk.Frame(master=card_border, bg='#111111', padx=30, pady=25)
+card.pack(fill='x')
+
+tk.Label(master=card, text='▸  INPUT',
+         font=('Helvetica', 9, 'bold'),
+         fg='#ff003c', bg='#111111').pack(anchor='w')
+
+tk.Frame(master=card, bg='#222222', height=1).pack(fill='x', pady=(4,14))
+
+#File button
+file_button = tk.Button(master=card, text='◈   BROWSE FILES',
+                        font=('Helvetica', 12, 'bold'),
+                        command=open_file,
+                        bg='#1a1a1a', fg='#ff003c',
+                        activebackground='#ff003c', activeforeground='#0d0d0d',
+                        relief='flat', borderwidth=0,
+                        padx=20, pady=12,
+                        width=24,
+                        cursor='hand2')
+file_button.pack()
+
+#File label
 file_string = tk.StringVar()
-file_label = tk.Label(master=window, font=('Times New Roman', 8), textvariable = file_string, bg='lightblue')
-file_label.pack()
-file_label.pack(pady = 20)
+file_label = tk.Label(master=card, font=('Helvetica', 7),
+                      textvariable=file_string,
+                      fg='#444444', bg='#111111',
+                      wraplength=420)
+file_label.pack(pady=8)
 
-#Answer output
+tk.Frame(master=card, bg='#222222', height=1).pack(fill='x', pady=(4,14))
+
+tk.Label(master=card, text='▸  CLASSIFY',
+         font=('Helvetica', 9, 'bold'),
+         fg='#ff003c', bg='#111111').pack(anchor='w')
+
+tk.Frame(master=card, bg='#222222', height=1).pack(fill='x', pady=(4,14))
+
+#Check button
+check_button = tk.Button(master=card, text='⚡   R U N   A N A L Y S I S   ⚡',
+                         font=('Helvetica', 14, 'bold'),
+                         command=check,
+                         bg='#ff003c', fg='#0d0d0d',
+                         activebackground='#cc0030', activeforeground='#0d0d0d',
+                         relief='flat', borderwidth=0,
+                         padx=20, pady=16,
+                         width=24,
+                         cursor='hand2')
+check_button.pack()
+
+#═══════════════════════════════════════
+#  OUTPUT
+#═══════════════════════════════════════
+output_frame = tk.Frame(master=window, bg='#0d0d0d')
+output_frame.pack(pady=10)
+
+tk.Label(master=output_frame, text='━━━━━━  OUTPUT  ━━━━━━',
+         font=('Helvetica', 9),
+         fg='#333333', bg='#0d0d0d').pack()
+
 answer_string = tk.StringVar()
-answer_label = tk.Label(master=window, font = ('Times New Roman', 20), textvariable = answer_string, bg='lightblue')
-answer_label.pack(pady = 20)
+answer_string.set('_ _ _')
+answer_label = tk.Label(master=output_frame,
+                        font=('Helvetica', 42, 'bold'),
+                        textvariable=answer_string,
+                        fg='#ffffff', bg='#0d0d0d')
+answer_label.pack(pady=8)
+
+tk.Label(master=output_frame, text='▲  PREDICTION',
+         font=('Helvetica', 8),
+         fg='#ff003c', bg='#0d0d0d').pack()
+
+#═══════════════════════════════════════
+#  FOOTER
+#═══════════════════════════════════════
+tk.Label(master=window,
+         text='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+         fg='#ff003c', bg='#0d0d0d').pack(side='bottom', pady=(0,4))
+
+tk.Label(master=window,
+         text="ELEC 292  ·  Queen's University  ·  2025",
+         font=('Helvetica', 7),
+         fg='#333333', bg='#0d0d0d').pack(side='bottom')
 
 #run
 window.mainloop()

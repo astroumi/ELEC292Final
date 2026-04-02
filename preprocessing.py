@@ -9,7 +9,7 @@ def preprocessing(raw_data):
     #raw_data_array: [Time, X, Y, Z, Abs]
     time = raw_data[:,0]
 
-    #Linearly imputate missing data
+    #Linearly impute missing data
     df_axes = pd.DataFrame(raw_data[:, 1:4], columns=['X', 'Y', 'Z'])
     df_axes = df_axes.interpolate(method='linear', limit_direction='both')
 
