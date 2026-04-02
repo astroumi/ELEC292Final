@@ -1,6 +1,8 @@
 from pathlib import Path
 from hdf import *
 
+
+
 #### Defines which split to run on runtime
 split_csv = False
 split_hdf = True
@@ -33,6 +35,27 @@ def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
 
     print(f"Created {created} files (up to {n_windows * 5:.0f}s)")
     return created
+
+def split_csv_in_memory(csv_path, fs=100, window_sec=5):
+    """Split one CSV → multiple 5s CSVs but keeps output in memory"""
+    window_len = int(fs * window_sec)
+
+    df = pd.read_csv(csv_path)
+    n_samples = len(df) #how many lines
+
+    windows = [] #creates windows array
+
+    #Compute number of windows
+    n_windows = n_samples // window_len
+
+    for i in range(n_windows):
+        start = i * window_len
+        end = start + window_len
+        windows_df = df.iloc[start:end].reset_index(drop=True)
+        windows.append(windows_df)
+
+    return windows
+
 
 def split_hdf_dataset(dataset: h5py.Dataset, dest_group: h5py.Group, fs=100, window_sec=5):
     ####### SPLITS HDF DATASET INTO MANY 5s DATASETS IN DESTINATION GROUP
