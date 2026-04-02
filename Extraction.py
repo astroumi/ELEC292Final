@@ -1,10 +1,11 @@
 import h5py
 import os
 import pandas as pd
+import numpy as np
 
 from hdf import *
-from preprocessing import *
 from sklearn.preprocessing import StandardScaler
+
 
 #Calculates 10 features of a 5-second segment
 #Takes in a numpy array of [Time, X, Y, Z, Magnitude]

@@ -60,9 +60,11 @@ with h5py.File(h5_path, 'a') as hdf:
             if filename.endswith(".csv"):
                 # Creates a path to the individual 5s .csv file
                 file_path = os.path.join(activity_path, filename)
-                # Read the CSV file into Pandas DataFrame
-                df = pd.read_csv(file_path)
-                # Converth the data into a Numpy array
+                #Only do this if specifically main is being run
+                if __name__ == '__main__':
+                    # Read the CSV file into Pandas DataFrame
+                    df = pd.read_csv(file_path)
+                # Convert the data into a Numpy array
                 data_matrix = df.to_numpy()
                 # Remove the .csv for cleanliness
                 dataset_name = filename.replace(".csv", "")
