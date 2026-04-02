@@ -15,3 +15,6 @@ git push
 - make preprocessing work on raw 5s data for finding a good window size
 - make split function work within hdf to apply to processed data (to be then used for training)
 - split code into multiple py files
+
+
+- feature extract xyz individually

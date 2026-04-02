@@ -4,7 +4,7 @@ import numpy as np
 from hdf import *
 
 
-def preprocessing(raw_data):
+def process(raw_data):
 
     #raw_data_array: [Time, X, Y, Z, Abs]
     time = raw_data[:,0]
@@ -32,29 +32,34 @@ def preprocessing(raw_data):
 
     return processed_df
 
+def preprocess_data():
 ################## PREPROCESSING ALL HDF DATA
+    #Preprocessed Data Group Set-up
+    with h5py.File(h5_path, 'a') as hdf:
+        processed_group = hdf['Processed_Data']
+        raw_group = hdf['Raw_Data']
 
-#Preprocessed Data Group Set-up
-with h5py.File(h5_path, 'a') as hdf:
-    for member_name in ['kip', 'umair', 'larry']:
-        #Creates name for the member_group
-        member_group = processed_group.require_group(member_name)
+        for member_name in ['kip', 'umair', 'larry']:
+            #Creates name for the member_group
+            member_group = processed_group.require_group(member_name)
 
-        #Loop through activities
-        for activity in ['jumping', 'walking']:
-            #Creates activity folder
-            activity_group = member_group.require_group(activity)
+            #Loop through activities
+            for activity in ['jumping', 'walking']:
+                #Creates activity folder
+                activity_group = member_group.require_group(activity)
 
-            #Loop through every dataset stored in the raw group
-            for dataset_name in raw_group[member_name][activity]:
-                #Get the 2D array from the raw group
-                raw_data = raw_group[member_name][activity][dataset_name][:]
-                #Process the information inside
-                processed_df = preprocessing(raw_data)
+                #Loop through every dataset stored in the raw group
+                for name, dataset in raw_group[member_name][activity].items():
+                    if not isinstance(dataset, h5py.Dataset):
+                        continue  # skip subgroups, just in case
+                    #Get the 2D array from the raw group
+                    raw_data = dataset[:]
+                    #Process the information inside
+                    processed_df = process(raw_data)
 
-                #Delete duplicates and save processed data to HDF5
-                if dataset_name in activity_group:
-                    del activity_group[dataset_name]
-                activity_group.create_dataset(dataset_name, data=processed_df.to_numpy())
-
-print("INFO: Data Preprocessing Complete.")
+                    #Delete duplicates and save processed data to HDF5
+                    if name in activity_group:
+                        del activity_group[name]
+                    activity_group.create_dataset(name, data=processed_df.to_numpy())
+    print("INFO: Data Preprocessing Complete.")
+    return 0

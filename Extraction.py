@@ -1,11 +1,10 @@
 import h5py
 import os
 import pandas as pd
-import numpy as np
-from hdf import h5_path
-from sklearn.preprocessing import StandardScaler
-import joblib
 
+from hdf import *
+from preprocessing import *
+from sklearn.preprocessing import StandardScaler
 
 #Calculates 10 features of a 5-second segment
 #Takes in a numpy array of [Time, X, Y, Z, Magnitude]
@@ -31,63 +30,63 @@ def extract_features(data):
     }
     return list(features.values())
 
-#Normalizes the training and testing data's features
-def extract_and_normalize():
-    #Initialize variables for feature list and label list for testing and training
-    test_features = []
-    test_labels = []
+#Initialize variables for feature list and label list for testing and training
+test_features = []
+test_labels = []
 
-    train_features = []
-    train_labels = []
+train_features = []
+train_labels = []
 
-    with h5py.File(h5_path, 'r') as hdf:
-        #Start at the top of the Split_Group
-        split_group = hdf['Segmented_Data']
+with h5py.File(h5_path, 'r') as hdf:
+    #Start at the top of the Split_Group
+    split_group = hdf['Segmented_Data']
 
-        #Loop through training and testing
-        for split_type in split_group.keys():
-            type_group = split_group[split_type]
+    #Loop through training and testing
+    for split_type in split_group.keys():
+        type_group = split_group[split_type]
 
-            #Loop through walking and jumping
-            for activity in type_group.keys():
-                activity_group = type_group[activity]
+        #Loop through walking and jumping
+        for activity in type_group.keys():
+            activity_group = type_group[activity]
 
-                #Loop through every 5 second file
-                for filename in activity_group.keys():
-                    # Pull the actual data array
-                    data = activity_group[filename][:]
+            #Loop through every 5 second file
+            for filename in activity_group.keys():
+                # Pull the actual data array
+                data = activity_group[filename][:]
 
-                    # Extract features
-                    feature_row = extract_features(data)
+                # Extract features
+                feature_row = extract_features(data)
 
-                    #Set label as 0 if walking and 1 if jumping
-                    label = 0 if activity == 'walking' else 1
+                #Set label as 0 if walking and 1 if jumping
+                label = 0 if activity == 'walking' else 1
 
-                    #Check what split type it is
-                    if split_type == 'train':
-                        train_features.append(feature_row)
-                        train_labels.append(label)
-                    else:
-                        test_features.append(feature_row)
-                        test_labels.append(label)
+                #Check what split type it is
+                if split_type == 'train':
+                    train_features.append(feature_row)
+                    train_labels.append(label)
+                else:
+                    test_features.append(feature_row)
+                    test_labels.append(label)
 
-    #Convert the features and labels list into numpy arrays
-    features_train = np.array(train_features)
-    labels_train = np.array(train_labels)
-    features_test = np.array(test_features)
-    labels_test = np.array(test_labels)
 
-    #Normalization
-    #Initialize the scaler
-    scaler = StandardScaler()
 
-    #Fit the scaler only the training data
-    scaler.fit(features_train)
+#Convert the features and labels list into numpy arrays
+features_train = np.array(train_features)
+labels_train = np.array(train_labels)
+features_test = np.array(test_features)
+labels_test = np.array(test_labels)
 
-    #Normalize both sets using the training values
-    #This is z-scoring the features
-    features_train_scaled = scaler.transform(features_train)
-    features_test_scaled = scaler.transform(features_test)
+#Normalization
+#Initialize the scaler
+scaler = StandardScaler()
+
+#Fit the scaler only the training data
+scaler.fit(features_train)
+
+#Normalize both sets using the training values
+#This is z-scoring the features
+features_train_scaled = scaler.transform(features_train)
+features_test_scaled = scaler.transform(features_test)
 
     #Save the fitted scaler to disk
     joblib.dump(scaler, 'scaler.pkl')
