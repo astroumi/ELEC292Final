@@ -5,6 +5,7 @@ import pandas as pd
 from hdf import *
 from preprocessing import *
 from sklearn.preprocessing import StandardScaler
+import joblib
 
 #Calculates 10 features of a 5-second segment
 #Takes in a numpy array of [Time, X, Y, Z, Magnitude]
@@ -88,10 +89,10 @@ scaler.fit(features_train)
 features_train_scaled = scaler.transform(features_train)
 features_test_scaled = scaler.transform(features_test)
 
-    #Save the fitted scaler to disk
-    joblib.dump(scaler, 'scaler.pkl')
+#Save the fitted scaler to disk
+joblib.dump(scaler, 'scaler.pkl')
 
-    #Print to check that it worked
-    print("Normalization Completed")
-    print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
-    print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1
+#Print to check that it worked
+print("Normalization Completed")
+print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
+print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1

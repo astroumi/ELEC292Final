@@ -8,8 +8,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from visualization import plot_app_results_embedded
 
-from Extraction import extract_features
-from split import split_csv_in_memory
+# from Extraction import extract_features
+# from split import split_csv_in_memory
 
 #Global Variables
 selected_filename = ""
@@ -75,7 +75,7 @@ def check ():
         save_results_to_csv(predictions)
 
         #Plot results
-        plot_app_results_embedded(selected_filename, predictions, window)
+        plot_app_results_embedded(selected_filename, predictions, plot_frame)
 
     except Exception as e:
         print(f"Something went wrong: {e}")
@@ -114,6 +114,17 @@ def save_results_to_csv(predictions, window_sec=5):
         print(f"Results saved to {output_path}")
 
 
+#Clears the window
+def clear():
+    global selected_filename
+    selected_filename = ""
+    file_string.set("")
+    answer_string.set("_ _ _")
+
+    #Clear plot if one exists
+    for plot in plot_frame.winfo_children():
+        plot.destroy()
+
 
 
 
@@ -141,7 +152,7 @@ tk.Label(master=header, text='C L A S S I F I E R',
 tk.Label(master=header, text='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
          fg='#ff003c', bg='#0d0d0d').pack(pady=8)
 
-tk.Label(master=header, text='a r e   y o u   w a l k i n g   o r   j u m p i n g ?',
+tk.Label(master=header, text='A r e   y o u   w a l k i n g   o r   j u m p i n g ?',
          font=('Helvetica', 9),
          fg='#555555', bg='#0d0d0d').pack()
 
@@ -200,6 +211,18 @@ check_button = tk.Button(master=card, text='⚡   R U N   A N A L Y S I S   ⚡'
                          cursor='hand2')
 check_button.pack()
 
+#Clear button
+clear_button = tk.Button(master=card, text='↺   C L E A R',
+                         font=('Helvetica', 10, 'bold'),
+                         command=clear,
+                         bg='#1a1a1a', fg='#ff003c',
+                         activebackground='#ff003c', activeforeground='#0d0d0d',
+                         relief='flat', borderwidth=0,
+                         padx=20, pady=8,
+                         width=24,
+                         cursor='hand2')
+clear_button.pack(pady=6)
+
 #═══════════════════════════════════════
 #  OUTPUT
 #═══════════════════════════════════════
@@ -221,6 +244,10 @@ answer_label.pack(pady=8)
 tk.Label(master=output_frame, text='▲  PREDICTION',
          font=('Helvetica', 8),
          fg='#ff003c', bg='#0d0d0d').pack()
+
+#### PLOT
+plot_frame = tk.Frame(master=window, bg='#0d0d0d')
+plot_frame.pack(fill='x', padx = 20)
 
 #═══════════════════════════════════════
 #  FOOTER
