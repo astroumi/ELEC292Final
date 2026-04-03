@@ -1,17 +1,13 @@
-import h5py
-import pandas as pd
-import numpy as np
-import os
-import joblib
-import matplotlib.pyplot as plt
+from preprocessing import *
+from split import *
 
-from hdf import h5_path
-from Extraction import extract_features, extract_and_normalize
-from preprocessing import preprocessing
-from visualization import *
+init_hdf5()
+preprocess_data()
+split_all('hdf')
+isolate_test_splits()
 
-
-features_train_scaled, labels_train_scaled, features_test_scaled, labels_test_scaled = extract_and_normalize()
+# print_h5_tree(h5_path)
+# features_train_scaled, labels_train_scaled, features_test_scaled, labels_test_scaled = extract_and_normalize()
 
 
 #love kip<3

@@ -37,7 +37,7 @@ def init_hdf5():
                 for csv_file in activity_path.glob("*.csv"):
                     # Read the CSV file into Pandas DataFrame
                     df = pd.read_csv(csv_file)
-                    # Converth the data into a Numpy array
+                    # Convert the data into a Numpy array
                     data_matrix = df.to_numpy()
                     # Remove the .csv for cleanliness
                     dataset_name = csv_file.stem
@@ -59,9 +59,18 @@ def init_hdf5():
                     # Remove the .csv for cleanliness
                     dataset_name = csv_file.stem
                     # Delete duplicates
-                    if dataset_name in activity_group:
-                        del activity_group[dataset_name]
+                    if dataset_name in split_activity_group:
+                        del split_activity_group[dataset_name]
                     # Save the dataset to the activity subgroup
-                    activity_group.create_dataset(dataset_name, data=data_matrix)
+                    split_activity_group.create_dataset(dataset_name, data=data_matrix)
     print("INFO: HDF5 Initialization Complete.")
     return 0
+
+def print_h5_tree(h5_path: str) -> None:
+    def _print(name, obj):
+        indent = "    " * name.count("/")
+        kind = "Group" if isinstance(obj, h5py.Group) else "Dataset"
+        print(f"{indent}{name} ({kind})")
+    with h5py.File(h5_path, "r") as f:
+        print(f"File: {h5_path}")
+        f.visititems(_print)

@@ -39,7 +39,7 @@ train_labels = []
 
 with h5py.File(h5_path, 'r') as hdf:
     #Start at the top of the Split_Group
-    split_group = hdf['Segmented_Data']
+    split_group = hdf['Split_Data']
 
     #Loop through training and testing
     for split_type in split_group.keys():
@@ -61,10 +61,10 @@ with h5py.File(h5_path, 'r') as hdf:
                 label = 0 if activity == 'walking' else 1
 
                 #Check what split type it is
-                if split_type == 'train':
+                if split_type == 'training':
                     train_features.append(feature_row)
                     train_labels.append(label)
-                else:
+                if split_type == 'testing':
                     test_features.append(feature_row)
                     test_labels.append(label)
 
@@ -76,22 +76,26 @@ labels_train = np.array(train_labels)
 features_test = np.array(test_features)
 labels_test = np.array(test_labels)
 
+print("FEATURES TRAIN")
+print(features_train)
+print("LABLES TRAIN")
+print(labels_train)
 #Normalization
 #Initialize the scaler
-scaler = StandardScaler()
-
-#Fit the scaler only the training data
-scaler.fit(features_train)
-
-#Normalize both sets using the training values
-#This is z-scoring the features
-features_train_scaled = scaler.transform(features_train)
-features_test_scaled = scaler.transform(features_test)
-
-    #Save the fitted scaler to disk
-    joblib.dump(scaler, 'scaler.pkl')
-
-    #Print to check that it worked
-    print("Normalization Completed")
-    print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
-    print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1
+# scaler = StandardScaler()
+#
+# #Fit the scaler only the training data
+# scaler.fit(features_train)
+#
+# #Normalize both sets using the training values
+# #This is z-scoring the features
+# features_train_scaled = scaler.transform(features_train)
+# features_test_scaled = scaler.transform(features_test)
+#
+#     #Save the fitted scaler to disk
+#     joblib.dump(scaler, 'scaler.pkl')
+#
+#     #Print to check that it worked
+#     print("Normalization Completed")
+#     print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
+#     print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1
