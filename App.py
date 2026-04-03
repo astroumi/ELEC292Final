@@ -8,8 +8,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
 from visualization import plot_app_results_embedded
 
-# from Extraction import extract_features
-# from split import split_csv_in_memory
+from Extraction import extract_features
+from split import split_csv_in_memory
 
 #Global Variables
 selected_filename = ""
@@ -120,7 +120,7 @@ def save_results_to_csv(predictions, window_sec=5):
 #Window
 window = tk.Tk()
 window.title('ELEC292 Final Project')
-window.geometry('560x680')
+window.geometry('560x1100')
 window.configure(bg='#0d0d0d')
 window.resizable(False, False)
 
