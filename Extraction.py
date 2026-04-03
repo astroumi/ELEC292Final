@@ -76,26 +76,22 @@ labels_train = np.array(train_labels)
 features_test = np.array(test_features)
 labels_test = np.array(test_labels)
 
-print("FEATURES TRAIN")
-print(features_train)
-print("LABLES TRAIN")
-print(labels_train)
-#Normalization
-#Initialize the scaler
-# scaler = StandardScaler()
-#
-# #Fit the scaler only the training data
-# scaler.fit(features_train)
-#
-# #Normalize both sets using the training values
-# #This is z-scoring the features
-# features_train_scaled = scaler.transform(features_train)
-# features_test_scaled = scaler.transform(features_test)
-#
-#     #Save the fitted scaler to disk
-#     joblib.dump(scaler, 'scaler.pkl')
-#
-#     #Print to check that it worked
-#     print("Normalization Completed")
-#     print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
-#     print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1
+# Normalization
+# Initialize the scaler
+scaler = StandardScaler()
+
+#Fit the scaler only the training data
+scaler.fit(features_train)
+
+#Normalize both sets using the training values
+#This is z-scoring the features
+features_train_scaled = scaler.transform(features_train)
+features_test_scaled = scaler.transform(features_test)
+
+    #Save the fitted scaler to disk
+    joblib.dump(scaler, 'scaler.pkl')
+
+    #Print to check that it worked
+    print("Normalization Completed")
+    print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
+    print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1
