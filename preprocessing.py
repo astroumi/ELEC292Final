@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 from hdf import h5_path
 
-
+#Takes in raw dataset and processes it
 def process(raw_data):
 
     #raw_data_array: [Time, X, Y, Z, Abs]
@@ -32,6 +32,7 @@ def process(raw_data):
     # print(processed_df)
     return processed_df
 
+# takes in CSV path from app and processes it
 def process_app(csv_path):
     raw_data = pd.read_csv(csv_path).to_numpy()
     # print("RAW DATA--------------------------------")
@@ -64,8 +65,8 @@ def process_app(csv_path):
 
     return processed_df
 
-def preprocess_data():
 ################## PREPROCESSING ALL HDF DATA
+def preprocess_data():
     #Preprocessed Data Group Set-up
     with h5py.File(h5_path, 'a') as hdf:
         processed_group = hdf['Processed_Data']

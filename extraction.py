@@ -11,7 +11,6 @@ from sklearn.preprocessing import StandardScaler
 #Calculates 10 features of a 5-second segment
 #Takes in a numpy array of [Time, X, Y, Z, Magnitude]
 #Returns a list of features
-
 def extract_features(data):
     #Extract features from the magnitude
     mag = pd.Series(data[:, 4])
@@ -33,6 +32,7 @@ def extract_features(data):
     }
     return list(features.values())
 
+# Extracts features from magnitude, x, y and z
 def extract_mxyz(data):
     #Extract features from the magnitude
     mag = pd.Series(data[:, 4])
@@ -101,6 +101,7 @@ def extract_mxyz(data):
     }
     return list(features.values())
 
+# Loops through the split datasets and extracts features
 def run_extraction(mode="mag"):
     global features_path
     #Initialize variables for feature list and label list for testing and training

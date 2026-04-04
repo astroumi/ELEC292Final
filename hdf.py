@@ -74,6 +74,8 @@ def init_hdf5():
     print("INFO: HDF5 Initialization Complete.")
     return 0
 
+
+### Prints the H5 tree so that we can visualize it
 def print_h5_tree(h5_path: str) -> None:
     def _print(name, obj):
         indent = "    " * name.count("/")

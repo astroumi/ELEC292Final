@@ -44,9 +44,9 @@ def default_run():
 
 
 while True:
-    print("\n════════════════════════════════════")
+    print("\n==================================")
     print(" ELEC 292 Project - Run Controller ")
-    print("════════════════════════════════════")
+    print("====================================")
     print("1. Launch App (or press Enter)")
     print("2. Default Setup/Training")
     print("3. Exit")

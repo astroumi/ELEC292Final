@@ -163,12 +163,6 @@ def launch_app():
     window.after(50, lambda: window.attributes('-topmost', False))
     window.focus_force()
 
-    #═══════════════════════════════════════
-    #  HEADER
-    #═══════════════════════════════════════
-    header = tk.Frame(master=window, bg='#0d0d0d')
-    header.pack(fill='x', pady=(15,0))
-
     # Gracefully close and return to the terminal menu
     def on_closing():
         print("Closing application...")
@@ -177,9 +171,8 @@ def launch_app():
 
     window.protocol("WM_DELETE_WINDOW", on_closing)
 
-    #═══════════════════════════════════════
+
     #  HEADER
-    #═══════════════════════════════════════
     header = tk.Frame(master=window, bg='#0d0d0d')
     header.pack(fill='x', pady=(30,0))
 
@@ -191,38 +184,30 @@ def launch_app():
              font=('Helvetica', 16),
              fg='#ff003c', bg='#0d0d0d').pack()
 
-    tk.Label(master=header, text='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    tk.Label(master=header, text='======================',
              fg='#ff003c', bg='#0d0d0d').pack(pady=8)
 
     tk.Label(master=header, text='A r e   y o u   w a l k i n g   o r   j u m p i n g ?',
              font=('Helvetica', 9),
              fg='white', bg='#0d0d0d').pack()
 
-    #═══════════════════════════════════════
+
     #  CARD
-    #═══════════════════════════════════════
     card_border = tk.Frame(master=window, bg='#ff003c', padx=2, pady=2)
     card_border.pack(pady=10, padx=40, fill='x')
 
     card = tk.Frame(master=card_border, bg='#111111', padx=30, pady=15)
     card.pack(fill='x')
 
-    tk.Label(master=card, text='▸  INPUT',
-             font=('Helvetica', 9, 'bold'),
-             fg='#ff003c', bg='#111111').pack(anchor='w')
-
-    tk.Frame(master=card, bg='#222222', height=1).pack(fill='x', pady=(4,14))
-
     #File button
-    file_button = tk.Button(master=card, text='◈   BROWSE FILES',
+    file_button = tk.Button(master=card, text='BROWSE FILES',
                             font=('Helvetica', 12, 'bold'),
                             command=open_file,
                             bg='#1a1a1a', fg='#ff003c',
                             activebackground='#ff003c', activeforeground='#0d0d0d',
                             relief='flat', borderwidth=0,
                             padx=20, pady=12,
-                            width=24,
-                            cursor='hand2')
+                            width=24)
     file_button.pack()
 
     #File label
@@ -233,45 +218,36 @@ def launch_app():
                           wraplength=420)
     file_label.pack(pady=8)
 
-    tk.Frame(master=card, bg='#222222', height=1).pack(fill='x', pady=(4,14))
-
-    tk.Label(master=card, text='▸  CLASSIFY',
-             font=('Helvetica', 9, 'bold'),
-             fg='#ff003c', bg='#111111').pack(anchor='w')
-
-    tk.Frame(master=card, bg='#222222', height=1).pack(fill='x', pady=(4,14))
-
     #Check button
-    check_button = tk.Button(master=card, text='⚡   R U N   A N A L Y S I S   ⚡',
+    check_button = tk.Button(master=card, text='R U N   A N A L Y S I S',
                              font=('Helvetica', 14, 'bold'),
                              command=check,
                              bg='#ff003c', fg='#0d0d0d',
                              activebackground='#cc0030', activeforeground='#0d0d0d',
                              relief='flat', borderwidth=0,
                              padx=20, pady=16,
-                             width=24,
-                             cursor='hand2')
+                             width=24)
     check_button.pack()
 
     #Clear button
-    clear_button = tk.Button(master=card, text='↺   C L E A R',
+    clear_button = tk.Button(master=card, text='C L E A R',
                              font=('Helvetica', 10, 'bold'),
                              command=clear,
                              bg='#1a1a1a', fg='#ff003c',
                              activebackground='#ff003c', activeforeground='#0d0d0d',
                              relief='flat', borderwidth=0,
                              padx=20, pady=8,
-                             width=24,
-                             cursor='hand2')
+                             width=24)
     clear_button.pack(pady=6)
 
-    #═══════════════════════════════════════
+
+
     #  OUTPUT
-    #═══════════════════════════════════════
+
     output_frame = tk.Frame(master=window, bg='#0d0d0d')
     output_frame.pack(pady=5)
 
-    tk.Label(master=output_frame, text='━━━━━━  OUTPUT  ━━━━━━',
+    tk.Label(master=output_frame, text='=====  OUTPUT  =====',
              font=('Helvetica', 9),
              fg='#333333', bg='#0d0d0d').pack()
 
@@ -283,7 +259,7 @@ def launch_app():
                             fg='#ffffff', bg='#0d0d0d')
     answer_label.pack(pady=8)
 
-    tk.Label(master=output_frame, text='▲  PREDICTION',
+    tk.Label(master=output_frame, text='PREDICTION',
              font=('Helvetica', 8),
              fg='#ff003c', bg='#0d0d0d').pack()
 
@@ -291,16 +267,5 @@ def launch_app():
     plot_frame = tk.Frame(master=window, bg='#0d0d0d')
     plot_frame.pack(fill='x', expand=True, padx = 20, pady=(0, 20))
 
-    #═══════════════════════════════════════
-    #  FOOTER
-    #═══════════════════════════════════════
-    tk.Label(master=window,
-             text='━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
-             fg='#ff003c', bg='#0d0d0d').pack(side='bottom', pady=(0,4))
-
-    tk.Label(master=window,
-             text="ELEC 292  ·  Queen's University  ·  2025",
-             font=('Helvetica', 7),
-             fg='#333333', bg='#0d0d0d').pack(side='bottom')
 
     window.mainloop()

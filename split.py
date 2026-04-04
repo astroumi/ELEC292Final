@@ -2,8 +2,8 @@ from pathlib import Path
 from hdf import *
 import numpy as np
 
+#Splits one CSV into multiple 5 second windows
 def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
-    """Split one CSV → multiple 5s CSVs"""
     window_len = int(fs * window_sec)  # 500
 
     df = pd.read_csv(csv_path)
@@ -15,13 +15,14 @@ def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
     n_windows = n_samples // window_len
     created = 0
 
+    # loops through all windows in the file
     for i in range(n_windows):
         start = i * window_len
         end = start + window_len
 
         window_df = df.iloc[start:end].reset_index(drop=True)
 
-        # Name: kip_walking_backpack_window0.csv
+        # sets name to kip_walking_backpack_window0.csv
         new_name = f"{filename}_{i+1}.csv"
         new_path = output_dir / new_name
 
@@ -31,8 +32,8 @@ def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
     print(f"Created {created} files (up to {n_windows * 5:.0f}s)")
     return created
 
+#Splits a dataframe into multiple 5 second windows and KEEPS THE OUTPUT IN MEMORY
 def split_df_in_memory(processed_df, fs=100, window_sec=5):
-    """Split one CSV → multiple 5s CSVs but keeps output in memory"""
     window_len = int(fs * window_sec)
 
     # df = pd.read_csv(csv_path)
@@ -51,8 +52,8 @@ def split_df_in_memory(processed_df, fs=100, window_sec=5):
 
     return windows
 
+####### SPLITS HDF DATASET INTO MANY 5s DATASETS IN DESTINATION GROUP
 def split_hdf_dataset(dataset: h5py.Dataset, dest_group: h5py.Group, fs=100, window_sec=5):
-    ####### SPLITS HDF DATASET INTO MANY 5s DATASETS IN DESTINATION GROUP
     window_len = int(fs * window_sec)  # 500
 
     n_samples = dataset.shape[0]
@@ -78,8 +79,9 @@ def split_hdf_dataset(dataset: h5py.Dataset, dest_group: h5py.Group, fs=100, win
     # print(f"Created {created} datasets (up to {n_windows * 5:.0f}s)")
     return created
 
+
+########## SPLIT 35s CSV FILES TO 5s CSV FILES
 def split_all(type: str):
-    ########## SPLIT 35s CSV FILES TO 5s CSV FILES
     if type == 'csv':
         input_dir = Path('data')
         output_dir = Path('data_split')
@@ -119,8 +121,9 @@ def split_all(type: str):
             print(f"INFO: Created {total_hdf} 5s datasets from {num_inputs} 35s datasets in output groups")
     return 0
 
+
+# Picks 10 random datasets from walking and jumping (~10%) and isolates them in testing folder, restructures Split_Data group to accomodate
 def isolate_test_splits(seed: int = 42):
-    # Picks 10 random datasets from walking and jumping (~10%) and isolates them in testing folder, restructures Split_Data group to accomodate
     np.random.seed(seed)  # Reproducible randomness
     print("INFO: Isolating test splits.")
     with h5py.File(h5_path, "a") as hdf:
@@ -165,12 +168,10 @@ def isolate_test_splits(seed: int = 42):
 
     return 0
 
+#Splits by recording not by individual window.
+#Picks 2 full recordings per activity for testing, rest go to training.
+#All 5s windows from a recording stay together in the same split
 def reorganize_split_group_by_recording(seed: int = 42) -> None:
-    """
-    Splits by RECORDING (35s trial), not by individual window.
-    Picks 2 full recordings per activity for testing, rest go to training.
-    All 5s windows from a recording stay together in the same split.
-    """
     np.random.seed(seed)
 
     with h5py.File(h5_path, "a") as hdf:
@@ -189,7 +190,7 @@ def reorganize_split_group_by_recording(seed: int = 42) -> None:
                 if isinstance(obj, h5py.Dataset)
             ]
 
-            # Group windows by their parent recording (strip _N suffix)
+            # Group windows by their parent recording
             import re
             recordings = {}
             for name in all_names:
