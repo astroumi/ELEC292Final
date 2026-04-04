@@ -3,12 +3,11 @@
 General:
 --- app will preprocess data, split into 5s intervals, extract features, normalize features,
     give each 5s split to model, model will label/make column for prediction,
-    app will sexily display output
+    app will nicely display output
 
 
 TO DO:
 - handle all types of edge cases across all files and functions
-- add file suffix for type of extraction and model training, so we can save more data, and use the right extracter in check() in app.py
 
 
 
