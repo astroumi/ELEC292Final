@@ -148,10 +148,10 @@ labels_test = np.array(test_labels)
 
 # Normalization
 # Initialize the scaler
-scaler = StandardScaler()
+# scaler = StandardScaler()
 
 #Fit the scaler only the training data
-scaler.fit(features_train)
+# scaler.fit(features_train)
 
 # #Normalize both sets using the training values
 # #This is z-scoring the features
