@@ -196,43 +196,43 @@ from hdf import *
 #                          title='Kip - Walking - Backpack - Raw vs Processed')
 #
 #
-#Plot acceleration data as a 3D trajectory
-def plot_3d_trajectory(df, title="3D Acceleration Path"):
-    fig = plt.figure(figsize=(10, 8))
-    ax = fig.add_subplot(111, projection='3d')
-
-    #Assign colums by position
-    time = df.iloc[:, 0]
-    x = df.iloc[:, 1]
-    y = df.iloc[:, 2]
-    z = df.iloc[:, 3]
-
-    #Create a scatter plot where the color changes over time
-    scatter = ax.scatter(x, y, z, c=time, cmap='viridis', s=5, alpha = 0.6)
-
-    #Add a color bar to show time progressoin
-    cbar = plt.colorbar(scatter, ax=ax, pad=0.1)
-    cbar.set_label('Time Progression (s)')
-
-    #Labels
-    ax.set_xlabel('X Acceleration (m/s²)')
-    ax.set_ylabel('Y Acceleration (m/s²)')
-    ax.set_zlabel('Z Acceleration (m/s²)')
-
-    fig.suptitle(title, fontsize=15, fontweight='bold')
-    plt.show()
-
-positions = ['hand', 'rightpocket', 'leftpocket', 'backpack', 'jacket']
-
-with h5py.File(h5_path, 'r') as hdf:
-    for position in positions:
-        dataset_name = f'umair_walking_{position}'
-        if dataset_name in hdf['Raw_Data/umair/walking']:
-            data = hdf[f'Raw_Data/umair/walking/{dataset_name}'][:]
-            df = pd.DataFrame(data)
-            plot_3d_trajectory(df, title=f'Kip - Walking - {position.capitalize()}')
-        else:
-            print(f'Dataset {dataset_name} not found')
+# #Plot acceleration data as a 3D trajectory
+# def plot_3d_trajectory(df, title="3D Acceleration Path"):
+#     fig = plt.figure(figsize=(10, 8))
+#     ax = fig.add_subplot(111, projection='3d')
+#
+#     #Assign colums by position
+#     time = df.iloc[:, 0]
+#     x = df.iloc[:, 1]
+#     y = df.iloc[:, 2]
+#     z = df.iloc[:, 3]
+#
+#     #Create a scatter plot where the color changes over time
+#     scatter = ax.scatter(x, y, z, c=time, cmap='viridis', s=5, alpha = 0.6)
+#
+#     #Add a color bar to show time progressoin
+#     cbar = plt.colorbar(scatter, ax=ax, pad=0.1)
+#     cbar.set_label('Time Progression (s)')
+#
+#     #Labels
+#     ax.set_xlabel('X Acceleration (m/s²)')
+#     ax.set_ylabel('Y Acceleration (m/s²)')
+#     ax.set_zlabel('Z Acceleration (m/s²)')
+#
+#     fig.suptitle(title, fontsize=15, fontweight='bold')
+#     plt.show()
+#
+# positions = ['hand', 'rightpocket', 'leftpocket', 'backpack', 'jacket']
+#
+# with h5py.File(h5_path, 'r') as hdf:
+#     for position in positions:
+#         dataset_name = f'umair_walking_{position}'
+#         if dataset_name in hdf['Raw_Data/umair/walking']:
+#             data = hdf[f'Raw_Data/umair/walking/{dataset_name}'][:]
+#             df = pd.DataFrame(data)
+#             plot_3d_trajectory(df, title=f'Kip - Walking - {position.capitalize()}')
+#         else:
+#             print(f'Dataset {dataset_name} not found')
 
 
 #
