@@ -223,7 +223,7 @@ def plot_app_results_embedded(csv_path, predictions, window, window_sec=5):
 
     #Dark theme to match app
     plt.style.use('dark_background')
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5.5, 4), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 4.5), constrained_layout=True)
     fig.patch.set_facecolor('#111111')
     ax1.set_facecolor('#111111')
     ax2.set_facecolor('#111111')
@@ -275,9 +275,9 @@ def plot_app_results_embedded(csv_path, predictions, window, window_sec=5):
     ax2.margins(x=0)
     ax2.set_ylim(-0.1, 1.1)
 
-    plt.tight_layout(pad=1.5)
+    plt.tight_layout(pad=1.2)
 
     #Embed in tkinter window
     canvas = FigureCanvasTkAgg(fig, master=window)
     canvas.draw()
-    canvas.get_tk_widget().pack(pady=10, padx=20, fill='x')
+    canvas.get_tk_widget().pack(fill='both', expand=True)

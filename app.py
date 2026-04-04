@@ -135,15 +135,15 @@ def clear():
 #Window
 window = tk.Tk()
 window.title('ELEC292 Final Project')
-window.geometry('560x900')
+window.geometry('1000x1000')
 window.configure(bg='#0d0d0d')
-window.resizable(True, True)
+window.resizable(False, False)
 
 #═══════════════════════════════════════
 #  HEADER
 #═══════════════════════════════════════
 header = tk.Frame(master=window, bg='#0d0d0d')
-header.pack(fill='x', pady=(30,0))
+header.pack(fill='x', pady=(15,0))
 
 tk.Label(master=header, text='M O T I O N',
          font=('Helvetica', 38, 'bold'),
@@ -164,9 +164,9 @@ tk.Label(master=header, text='A r e   y o u   w a l k i n g   o r   j u m p i n 
 #  CARD
 #═══════════════════════════════════════
 card_border = tk.Frame(master=window, bg='#ff003c', padx=2, pady=2)
-card_border.pack(pady=25, padx=40, fill='x')
+card_border.pack(pady=10, padx=40, fill='x')
 
-card = tk.Frame(master=card_border, bg='#111111', padx=30, pady=25)
+card = tk.Frame(master=card_border, bg='#111111', padx=30, pady=15)
 card.pack(fill='x')
 
 tk.Label(master=card, text='▸  INPUT',
@@ -231,7 +231,7 @@ clear_button.pack(pady=6)
 #  OUTPUT
 #═══════════════════════════════════════
 output_frame = tk.Frame(master=window, bg='#0d0d0d')
-output_frame.pack(pady=10)
+output_frame.pack(pady=5)
 
 tk.Label(master=output_frame, text='━━━━━━  OUTPUT  ━━━━━━',
          font=('Helvetica', 9),
@@ -251,7 +251,7 @@ tk.Label(master=output_frame, text='▲  PREDICTION',
 
 #### PLOT
 plot_frame = tk.Frame(master=window, bg='#0d0d0d')
-plot_frame.pack(fill='both', expand = True, padx = 20)
+plot_frame.pack(fill='x', expand=True, padx = 20, pady=(0, 20))
 
 #═══════════════════════════════════════
 #  FOOTER
