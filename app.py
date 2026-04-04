@@ -86,6 +86,14 @@ def check ():
         predictions = classifier_model.predict(all_features)
 
         answer_string.set("jumping!!!")
+        #Count results
+        walking_count = sum(predictions == 0)
+        jumping_count = sum(predictions == 1)
+
+        if walking_count > jumping_count:
+            answer_string.set("Mostly walking!!!")
+        else:
+            answer_string.set("Mostly jumping!!!")
 
         # 6. Export results and plot in app
         save_results_to_csv(predictions)
@@ -151,10 +159,15 @@ def launch_app():
     #Window
     window = tk.Tk()
     window.title('ELEC292 Final Project')
-    window.geometry('560x900')
+    window.geometry('1000x1000')
     window.configure(bg='#0d0d0d')
-    window.resizable(True, True)
+    window.resizable(False, False)
 
+    #═══════════════════════════════════════
+    #  HEADER
+    #═══════════════════════════════════════
+    header = tk.Frame(master=window, bg='#0d0d0d')
+    header.pack(fill='x', pady=(15,0))
     # Gracefully close and return to the terminal menu
     def on_closing():
         print("Closing application...")
@@ -187,9 +200,9 @@ def launch_app():
     #  CARD
     #═══════════════════════════════════════
     card_border = tk.Frame(master=window, bg='#ff003c', padx=2, pady=2)
-    card_border.pack(pady=25, padx=40, fill='x')
+    card_border.pack(pady=10, padx=40, fill='x')
 
-    card = tk.Frame(master=card_border, bg='#111111', padx=30, pady=25)
+    card = tk.Frame(master=card_border, bg='#111111', padx=30, pady=15)
     card.pack(fill='x')
 
     tk.Label(master=card, text='▸  INPUT',
@@ -254,7 +267,7 @@ def launch_app():
     #  OUTPUT
     #═══════════════════════════════════════
     output_frame = tk.Frame(master=window, bg='#0d0d0d')
-    output_frame.pack(pady=10)
+    output_frame.pack(pady=5)
 
     tk.Label(master=output_frame, text='━━━━━━  OUTPUT  ━━━━━━',
              font=('Helvetica', 9),
@@ -274,7 +287,7 @@ def launch_app():
 
     #### PLOT
     plot_frame = tk.Frame(master=window, bg='#0d0d0d')
-    plot_frame.pack(fill='both', expand = True, padx = 20)
+    plot_frame.pack(fill='x', expand=True, padx = 20, pady=(0, 20))
 
     #═══════════════════════════════════════
     #  FOOTER

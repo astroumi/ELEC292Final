@@ -2,6 +2,7 @@ from hdf import *
 import h5py
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import matplotlib.ticker as ticker
 
 #Function to make it easier to plot straight HDF5 datasets
 def plot_hdf5_dataset(internal_path, title="Accelerometer Data"):
@@ -223,7 +224,7 @@ def plot_app_results_embedded(csv_path, predictions, window, window_sec=5):
 
     #Dark theme to match app
     plt.style.use('dark_background')
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5.5, 4), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 5), constrained_layout=True)
     fig.patch.set_facecolor('#111111')
     ax1.set_facecolor('#111111')
     ax2.set_facecolor('#111111')
@@ -239,6 +240,10 @@ def plot_app_results_embedded(csv_path, predictions, window, window_sec=5):
     #Remove margins so line touches edges
     ax1.set_xlim(time_data.min(), time_data.max())
     ax1.margins(x=0)
+
+    #Set x axis ticks and grid to every 5 seconds
+    ax1.xaxis.set_major_locator(ticker.MultipleLocator(window_sec))
+    ax1.grid(True, which='major', axis='x', alpha=0.3, color='#555555')
 
     #Build the time and label arrays
     time_start = time_data.iloc[0]
@@ -275,9 +280,11 @@ def plot_app_results_embedded(csv_path, predictions, window, window_sec=5):
     ax2.margins(x=0)
     ax2.set_ylim(-0.1, 1.1)
 
-    plt.tight_layout(pad=1.5)
+    #Set x axis ticks and grid to every 5 seconds
+    ax2.xaxis.set_major_locator(ticker.MultipleLocator(window_sec))
+    ax2.grid(True, which='major', axis='x', alpha=0.3, color='#555555')
 
     #Embed in tkinter window
     canvas = FigureCanvasTkAgg(fig, master=window)
     canvas.draw()
-    canvas.get_tk_widget().pack(pady=10, padx=20, fill='x')
+    canvas.get_tk_widget().pack(fill='both', expand=True)
