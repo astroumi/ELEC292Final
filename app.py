@@ -85,20 +85,10 @@ def check ():
         # 5. Predict using preloaded model
         predictions = classifier_model.predict(all_features)
 
-        answer_string.set("jumping!!!")
-        #Count results
-        walking_count = sum(predictions == 0)
-        jumping_count = sum(predictions == 1)
-
-        if walking_count > jumping_count:
-            answer_string.set("Mostly walking!!!")
-        else:
-            answer_string.set("Mostly jumping!!!")
-
         # 6. Export results and plot in app
         save_results_to_csv(predictions)
         plot_app_results_embedded(selected_filename, predictions, plot_frame)
-        answer_string.set("Processed...")
+        answer_string.set("Analysis Complete:")
 
     except Exception as e:
         print(f"Something went wrong: {e}")
