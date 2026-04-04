@@ -162,3 +162,63 @@ def isolate_test_splits(seed: int = 42):
             print(f"    {activity}: {len(train_names)} training, {len(test_names)} testing")
 
     print(f"INFO: Test splits randomly separated, seed {seed}.")
+
+    return 0
+
+def reorganize_split_group_by_recording(seed: int = 42) -> None:
+    """
+    Splits by RECORDING (35s trial), not by individual window.
+    Picks 2 full recordings per activity for testing, rest go to training.
+    All 5s windows from a recording stay together in the same split.
+    """
+    np.random.seed(seed)
+
+    with h5py.File(h5_path, "a") as hdf:
+        split_group = hdf["Split_Data"]
+
+        # Remove old training/testing if they exist
+        for key in ["training", "testing"]:
+            if key in split_group:
+                del split_group[key]
+
+        for activity in ["walking", "jumping"]:
+            activity_group = split_group[activity]
+
+            all_names = [
+                name for name, obj in activity_group.items()
+                if isinstance(obj, h5py.Dataset)
+            ]
+
+            # Group windows by their parent recording (strip _N suffix)
+            import re
+            recordings = {}
+            for name in all_names:
+                base = re.sub(r'_\d+$', '', name)
+                recordings.setdefault(base, []).append(name)
+
+            # Randomly pick 2 full recordings for testing
+            all_bases = list(recordings.keys())
+            test_bases = list(np.random.choice(all_bases, size=2, replace=False))
+            train_bases = [b for b in all_bases if b not in test_bases]
+
+            train_grp = split_group.require_group(f"training/{activity}")
+            test_grp  = split_group.require_group(f"testing/{activity}")
+
+            for base in train_bases:
+                for name in recordings[base]:
+                    hdf.copy(activity_group[name], train_grp, name=name)
+
+            for base in test_bases:
+                for name in recordings[base]:
+                    hdf.copy(activity_group[name], test_grp, name=name)
+
+            print(f"{activity}: {len(train_bases)} recordings → training, "
+                  f"{len(test_bases)} recordings → testing "
+                  f"({sum(len(recordings[b]) for b in test_bases)} test windows)")
+
+        # Remove old flat activity groups
+        for activity in ["walking", "jumping"]:
+            if activity in split_group:
+                del split_group[activity]
+
+    print("INFO: Reorganization by recording complete.")
