@@ -223,7 +223,7 @@ def plot_app_results_embedded(csv_path, predictions, window, window_sec=5):
 
     #Dark theme to match app
     plt.style.use('dark_background')
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 5), sharex=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(5.5, 4), sharex=True)
     fig.patch.set_facecolor('#111111')
     ax1.set_facecolor('#111111')
     ax2.set_facecolor('#111111')

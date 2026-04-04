@@ -71,19 +71,9 @@ def plot_app_results(csv_path, predictions, window_sec=5):
     plt.tight_layout(pad=1.5)
     plt.show()
 
-
-    #Fill the step plot with colors to make reading easier
-    for i, pred in enumerate(predictions):
-        color = 'lightgreen' if pred == 0 else 'lightcoral'
-        ax2.axvspan(times[i], times[i] + window_sec, alpha=0.3, color=color)
-
-    ax2.set_xlabel('Time (s)')
-    ax2.set_title('Predicted Activity over Time')
-    ax2.grid(True, alpha=0.3)
-
-    plt.tight_layout()
-    plt.show()
-
+#Creates RANDOM LABELS
+###### THE LABELS DO NOT REFLECT THE PLACEHOLDER DATASET THAT IS SHOWN ON THE TOP PLOT
+### The label plot changes after every run
 
 def fake_predictions(csv_path, window_sec=5, fs=100):
     import pandas as pd
