@@ -1,0 +1,8 @@
+window,time,end_time,label
+1,0,5,walking
+2,5,10,walking
+3,10,15,walking
+4,15,20,walking
+5,20,25,walking
+6,25,30,walking
+7,30,35,walking

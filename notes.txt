@@ -23,3 +23,7 @@ git push
 --- app will preprocess data, split into 5s intervals, extract features, normalize features,
     give each 5s split to model, model will label/make column for prediction,
     app will sexily display output
+
+
+- need to figure out how to export model as variable
+- need to figure out how to normalize data for use with model prediction

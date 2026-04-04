@@ -124,8 +124,8 @@ with h5py.File(h5_path, 'r') as hdf:
                 data = activity_group[filename][:]
 
                 # Extract features
-                # feature_row = extract_features(data)
-                feature_row = extract_mxyz(data)
+                feature_row = extract_features(data)
+                # feature_row = extract_mxyz(data)
 
                 #Set label as 0 if walking and 1 if jumping
                 label = 0 if activity == 'walking' else 1
@@ -146,13 +146,13 @@ labels_train = np.array(train_labels)
 features_test = np.array(test_features)
 labels_test = np.array(test_labels)
 
-# # Normalization
-# # Initialize the scaler
-# scaler = StandardScaler()
-#
-# #Fit the scaler only the training data
-# scaler.fit(features_train)
-#
+# Normalization
+# Initialize the scaler
+scaler = StandardScaler()
+
+#Fit the scaler only the training data
+scaler.fit(features_train)
+
 # #Normalize both sets using the training values
 # #This is z-scoring the features
 # features_train_scaled = scaler.transform(features_train)

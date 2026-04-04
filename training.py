@@ -27,36 +27,36 @@ def train_classifier(classifier, name, features_train, labels_train, features_te
     # Train
     pipeline.fit(features_train, labels_train) #normalizes data then trains model
 
-    # Predict
-    y_pred = pipeline.predict(features_test)
-    y_prob = pipeline.predict_proba(features_test)[:, 1]  # Probability(jumping)
-
-    # ── Metrics ──────────────────────────────────────────────
-    acc     = accuracy_score(labels_test, y_pred)
-    recall  = recall_score(labels_test, y_pred)   # sensitivity / TPR
-    auc     = roc_auc_score(labels_test, y_prob)
-
-    print(f"\n── {name} ──")
-    print(f"  Accuracy : {acc:.4f}")
-    print(f"  Recall   : {recall:.4f}")
-    print(f"  AUC      : {auc:.4f}")
-
-    # ── Confusion Matrix ─────────────────────────────────────
-    cm = confusion_matrix(labels_test, y_pred)
-    disp = ConfusionMatrixDisplay(cm, display_labels=["walking", "jumping"])
-    disp.plot()
-    plt.title(f"Confusion Matrix — {name}")
-    plt.tight_layout()
-    plt.savefig(f"confusion_{name.replace(' ', '_')}.png")
-    plt.show()
-
-    # ── ROC Curve ────────────────────────────────────────────
-    fpr, tpr, _ = roc_curve(labels_test, y_prob)
-    RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=auc, estimator_name=name).plot()
-    plt.title(f"ROC Curve — {name}")
-    plt.tight_layout()
-    plt.savefig(f"roc_{name.replace(' ', '_')}.png")
-    plt.show()
+    # # Predict
+    # y_pred = pipeline.predict(features_test)
+    # y_prob = pipeline.predict_proba(features_test)[:, 1]  # Probability(jumping)
+    #
+    # # ── Metrics ──────────────────────────────────────────────
+    # acc     = accuracy_score(labels_test, y_pred)
+    # recall  = recall_score(labels_test, y_pred)   # sensitivity / TPR
+    # auc     = roc_auc_score(labels_test, y_prob)
+    #
+    # print(f"\n── {name} ──")
+    # print(f"  Accuracy : {acc:.4f}")
+    # print(f"  Recall   : {recall:.4f}")
+    # print(f"  AUC      : {auc:.4f}")
+    #
+    # # ── Confusion Matrix ─────────────────────────────────────
+    # cm = confusion_matrix(labels_test, y_pred)
+    # disp = ConfusionMatrixDisplay(cm, display_labels=["walking", "jumping"])
+    # disp.plot()
+    # plt.title(f"Confusion Matrix — {name}")
+    # plt.tight_layout()
+    # plt.savefig(f"confusion_{name.replace(' ', '_')}.png")
+    # plt.show()
+    #
+    # # ── ROC Curve ────────────────────────────────────────────
+    # fpr, tpr, _ = roc_curve(labels_test, y_prob)
+    # RocCurveDisplay(fpr=fpr, tpr=tpr, roc_auc=auc, estimator_name=name).plot()
+    # plt.title(f"ROC Curve — {name}")
+    # plt.tight_layout()
+    # plt.savefig(f"roc_{name.replace(' ', '_')}.png")
+    # plt.show()
 
     return pipeline  # return trained model in case you want to reuse it
 

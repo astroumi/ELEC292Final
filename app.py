@@ -6,10 +6,11 @@ import numpy as np
 import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 
+from training import *
 from visualization import plot_app_results_embedded
 
-# from Extraction import extract_features
-# from split import split_csv_in_memory
+from extraction import extract_features, scaler
+from split import split_csv_in_memory
 
 #Global Variables
 selected_filename = ""
@@ -60,7 +61,7 @@ def check ():
         features_scaled = scaler.transform(np.array(all_features))
 
         #Run the classifier on every window and add 0s or 1s to a predictions array
-        predictions = model.predict(features_scaled)
+        predictions = lr_model.predict(features_scaled)
 
         #Count results
         walking_count = sum(predictions == 0)
