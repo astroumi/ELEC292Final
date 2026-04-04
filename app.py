@@ -56,12 +56,8 @@ def check ():
             features = extract_features(window_data.values)
             all_features.append(features)
 
-        #Normalize the data
-        #Converts all_features into a 2D numpy array and normalizes every feature using fitted scaler
-        features_scaled = scaler.transform(np.array(all_features))
-
         #Run the classifier on every window and add 0s or 1s to a predictions array
-        predictions = lr_model.predict(features_scaled)
+        predictions = lr_model.predict(all_features)
 
         #Count results
         walking_count = sum(predictions == 0)
