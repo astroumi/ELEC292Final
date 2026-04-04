@@ -65,9 +65,9 @@ def check ():
         jumping_count = sum(predictions == 1)
 
         if walking_count > jumping_count:
-            answer_string.set("walking!!!")
+            answer_string.set("Mostly walking!!!")
         else:
-            answer_string.set("jumping!!!")
+            answer_string.set("Mostly jumping!!!")
 
         #Save results to CSV
         save_results_to_csv(predictions)
