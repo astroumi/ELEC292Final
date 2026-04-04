@@ -1,29 +1,9 @@
-Time (s)
-Acceleration x (m/s^2)
-Acceleration y (m/s^2)
-Acceleration z (m/s^2)
-Absolute acceleration (m/s^2)
-
-
-git rm --cached file.html
-git rm --cached -r .idea
-git add .gitignore
-git commit -m "Ignore local files"
-git push
-
-
-- make preprocessing work on raw 5s data for finding a good window size
-- make split function work within hdf to apply to processed data (to be then used for training)
-- split code into multiple py files
-
-
-- feature extract xyz individually
-
-
 --- app will preprocess data, split into 5s intervals, extract features, normalize features,
     give each 5s split to model, model will label/make column for prediction,
     app will sexily display output
 
-
+- extraction and training into functions, terminal interface to decide run type on main, also retrain classifier on new data?
 - need to figure out how to export model as variable
 - need to figure out how to normalize data for use with model prediction
+- test not preprocessing data on algo
+- save trained classifier on disk, use within app
