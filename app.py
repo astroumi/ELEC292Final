@@ -5,6 +5,7 @@ import joblib
 import numpy as np
 import pandas as pd
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from pathlib import Path
 
 from training import *
 from visualization import plot_app_results_embedded
@@ -56,12 +57,8 @@ def check ():
             features = extract_features(window_data.values)
             all_features.append(features)
 
-        #Normalize the data
-        #Converts all_features into a 2D numpy array and normalizes every feature using fitted scaler
-        features_scaled = scaler.transform(np.array(all_features))
-
         #Run the classifier on every window and add 0s or 1s to a predictions array
-        predictions = lr_model.predict(features_scaled)
+        predictions = lr_model.predict(all_features)
 
         #Count results
         walking_count = sum(predictions == 0)
@@ -99,12 +96,18 @@ def save_results_to_csv(predictions, window_sec=5):
             'label': label
         })
 
+        #Save just the filename and add _predictions
+        raw_name = Path(selected_filename).stem
+        suggested_name = f"{raw_name}_predictions"
+
     #Convert list of dictionaries into a pandas dataframe
     output_df = pd.DataFrame(rows)
     #Allows user to choose where to save the file and what to name it
     output_path = filedialog.asksaveasfilename(
         #Automatically adds .csv to the file name if not added
         defaultextension='.csv',
+        #Suggest a file name
+        initialfile=suggested_name,
         #Restricts the file browser to only show CSV files so users can't save it to the wrong format
         filetypes=[('CSV files', '*.csv')]
     )
@@ -132,9 +135,9 @@ def clear():
 #Window
 window = tk.Tk()
 window.title('ELEC292 Final Project')
-window.geometry('560x1100')
+window.geometry('560x900')
 window.configure(bg='#0d0d0d')
-window.resizable(False, False)
+window.resizable(True, True)
 
 #═══════════════════════════════════════
 #  HEADER
@@ -155,7 +158,7 @@ tk.Label(master=header, text='━━━━━━━━━━━━━━━━�
 
 tk.Label(master=header, text='A r e   y o u   w a l k i n g   o r   j u m p i n g ?',
          font=('Helvetica', 9),
-         fg='#555555', bg='#0d0d0d').pack()
+         fg='white', bg='#0d0d0d').pack()
 
 #═══════════════════════════════════════
 #  CARD
@@ -188,7 +191,7 @@ file_button.pack()
 file_string = tk.StringVar()
 file_label = tk.Label(master=card, font=('Helvetica', 7),
                       textvariable=file_string,
-                      fg='#444444', bg='#111111',
+                      fg='white', bg='#111111',
                       wraplength=420)
 file_label.pack(pady=8)
 
@@ -248,7 +251,7 @@ tk.Label(master=output_frame, text='▲  PREDICTION',
 
 #### PLOT
 plot_frame = tk.Frame(master=window, bg='#0d0d0d')
-plot_frame.pack(fill='x', padx = 20)
+plot_frame.pack(fill='both', expand = True, padx = 20)
 
 #═══════════════════════════════════════
 #  FOOTER
