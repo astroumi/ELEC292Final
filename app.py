@@ -10,7 +10,7 @@ from pathlib import Path
 from training import *
 from visualization import plot_app_results_embedded
 
-from extraction import extract_features, scaler
+from extraction import extract_features
 from split import split_csv_in_memory
 
 #Global Variables
@@ -48,8 +48,10 @@ def check ():
     try:
         answer_string.set("Processing...")
 
+        #Preprocess data before splitting into windows (cleans up blemishes)
+        processed = process_app(selected_filename)
         #Split the data into 5 second windows make a windows list out of them
-        windows = split_csv_in_memory(selected_filename)
+        windows = split_csv_in_memory(processed)
 
         #Extract features
         all_features = []

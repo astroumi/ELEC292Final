@@ -30,8 +30,10 @@ def process(raw_data):
     # print(processed_df)
     return processed_df
 
-def process_app(raw_data):
-
+def process_app(csv_path):
+    raw_data = pd.read_csv(csv_path).to_numpy()
+    print("RAW DATA--------------------------------")
+    print(raw_data)
     #raw_data_array: [Time, X, Y, Z, Abs]
     time = raw_data[:,0]
 
@@ -55,6 +57,8 @@ def process_app(raw_data):
         'Z': df_smoothed['Z'],
         'Magnitude': mag
     })
+    print("PROCESSED DATA--------------------------------")
+    print(processed_df)
 
     return processed_df
 

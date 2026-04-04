@@ -31,12 +31,12 @@ def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
     print(f"Created {created} files (up to {n_windows * 5:.0f}s)")
     return created
 
-def split_csv_in_memory(csv_path, fs=100, window_sec=5):
+def split_csv_in_memory(processed_df, fs=100, window_sec=5):
     """Split one CSV → multiple 5s CSVs but keeps output in memory"""
     window_len = int(fs * window_sec)
 
-    df = pd.read_csv(csv_path)
-    n_samples = len(df) #how many lines
+    # df = pd.read_csv(csv_path)
+    n_samples = len(processed_df) #how many lines
 
     windows = [] #creates windows array
 
@@ -46,7 +46,7 @@ def split_csv_in_memory(csv_path, fs=100, window_sec=5):
     for i in range(n_windows):
         start = i * window_len
         end = start + window_len
-        windows_df = df.iloc[start:end].reset_index(drop=True)
+        windows_df = processed_df.iloc[start:end].reset_index(drop=True)
         windows.append(windows_df)
 
     return windows
