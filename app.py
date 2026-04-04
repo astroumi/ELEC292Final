@@ -263,7 +263,7 @@ tk.Label(master=window,
          fg='#ff003c', bg='#0d0d0d').pack(side='bottom', pady=(0,4))
 
 tk.Label(master=window,
-         text="ELEC 292  ·  Queen's University  ·  2025",
+         text="ELEC 292  ·  Queen's University  ·  2026",
          font=('Helvetica', 7),
          fg='#333333', bg='#0d0d0d').pack(side='bottom')
 
