@@ -11,7 +11,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay, roc_curve, RocCurveDisplay, roc_auc_score
 )
 import joblib
-from hdf import features_path, model_path
+from hdf import appdata_dir, features_path, model_path
 
 
 def train_classifier(classifier, name, features_train, labels_train, features_test, labels_test):
@@ -63,7 +63,7 @@ def train_classifier(classifier, name, features_train, labels_train, features_te
 def run_training(model_type):
     # Check if features exist using pathlib
     if not features_path.exists():
-        print(f"ERROR: Run extraction first! '{features_path.name}' not found in appdata.")
+        print(f"ERROR: Run extraction first! Extraction file not found.")
         return
 
     # Load the extracted features

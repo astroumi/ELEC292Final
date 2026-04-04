@@ -15,7 +15,7 @@ appdata_dir = base_dir / "appdata"
 appdata_dir.mkdir(exist_ok=True) # This creates the folder safely if it doesn't exist
 
 h5_path = appdata_dir / "ELEC292_Project.h5"
-features_path = appdata_dir / 'extracted_features.npz'
+features_path = appdata_dir / f'extracted_features.npz'
 model_path = appdata_dir / 'trained_model.pkl'
 
 

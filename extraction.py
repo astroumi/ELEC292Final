@@ -3,7 +3,8 @@ import os
 import pandas as pd
 import numpy as np
 
-from hdf import h5_path, features_path
+from hdf import h5_path, appdata_dir
+
 # from preprocessing import *
 from sklearn.preprocessing import StandardScaler
 
@@ -100,7 +101,8 @@ def extract_mxyz(data):
     }
     return list(features.values())
 
-def run_extraction(mode):
+def run_extraction(mode="mag"):
+    global features_path
     #Initialize variables for feature list and label list for testing and training
     test_features = []
     test_labels = []
@@ -151,6 +153,8 @@ def run_extraction(mode):
     labels_train = np.array(train_labels)
     features_test = np.array(test_features)
     labels_test = np.array(test_labels)
+
+    features_path = appdata_dir / f'extracted_features.npz'
 
     # Save the extracted features to disk
     np.savez(features_path,

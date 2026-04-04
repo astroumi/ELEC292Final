@@ -8,9 +8,9 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pathlib import Path
 
 # from training import *
-from hdf import appdata_dir, model_path
+from hdf import appdata_dir, model_path, features_path
 from preprocessing import process_app
-from extraction import extract_features
+from extraction import extract_features, extract_mxyz
 from split import split_df_in_memory
 from visualization import plot_app_results_embedded
 
@@ -47,6 +47,7 @@ def check ():
         return None
 
     # Try to load the model from the appdata folder
+
     if not model_path.exists():
         answer_string.set("No Model Found")
         print("ERROR: 'trained_model.pkl' not found. Please train a model first!")
@@ -76,11 +77,15 @@ def check ():
             print("Error: CSV file must contain at least 5 seconds of data.")
             return None
 
-        # 4. Extract features
+        # 4. Extract features with appropriate shape
         all_features = []
-        for window_data in windows:
-            features = extract_features(window_data.values)
-            all_features.append(features)
+        if (features_path).exists():
+            for window_data in windows:
+                features = extract_features(window_data.values)
+                all_features.append(features)
+        else:
+            print("ERROR: No feature extraction file found to determine mode.")
+            return None
 
         # 5. Predict using preloaded model
         predictions = classifier_model.predict(all_features)
@@ -151,16 +156,23 @@ def launch_app():
     window.title('ELEC292 Final Project')
     window.geometry('1000x1000')
     window.configure(bg='#0d0d0d')
-    window.resizable(False, False)
+    window.resizable(True, True)
+
+    window.lift()
+    window.attributes('-topmost', True)
+    window.after(50, lambda: window.attributes('-topmost', False))
+    window.focus_force()
 
     #═══════════════════════════════════════
     #  HEADER
     #═══════════════════════════════════════
     header = tk.Frame(master=window, bg='#0d0d0d')
     header.pack(fill='x', pady=(15,0))
+
     # Gracefully close and return to the terminal menu
     def on_closing():
         print("Closing application...")
+        window.quit()
         window.destroy()
 
     window.protocol("WM_DELETE_WINDOW", on_closing)
