@@ -1,5 +1,7 @@
+import h5py
+import pandas as pd
 import numpy as np
-from hdf import *
+from hdf import h5_path
 
 
 def process(raw_data):
@@ -32,8 +34,8 @@ def process(raw_data):
 
 def process_app(csv_path):
     raw_data = pd.read_csv(csv_path).to_numpy()
-    print("RAW DATA--------------------------------")
-    print(raw_data)
+    # print("RAW DATA--------------------------------")
+    # print(raw_data)
     #raw_data_array: [Time, X, Y, Z, Abs]
     time = raw_data[:,0]
 
@@ -57,11 +59,10 @@ def process_app(csv_path):
         'Z': df_smoothed['Z'],
         'Magnitude': mag
     })
-    print("PROCESSED DATA--------------------------------")
-    print(processed_df)
+    # print("PROCESSED DATA--------------------------------")
+    # print(processed_df)
 
     return processed_df
-
 
 def preprocess_data():
 ################## PREPROCESSING ALL HDF DATA

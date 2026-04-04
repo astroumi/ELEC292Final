@@ -9,7 +9,15 @@ import pandas as pd
 base_dir = Path(__file__).resolve().parent
 data_folder = base_dir / "data"
 split_folder = base_dir / "data_split"
-h5_path = base_dir / "ELEC292_Project.h5"
+
+#define appdata directory with files only meant to be accessed from app
+appdata_dir = base_dir / "appdata"
+appdata_dir.mkdir(exist_ok=True) # This creates the folder safely if it doesn't exist
+
+h5_path = appdata_dir / "ELEC292_Project.h5"
+features_path = appdata_dir / 'extracted_features.npz'
+model_path = appdata_dir / 'trained_model.pkl'
+
 
 def init_hdf5():
 #Open the folder at the end of the h5_path in append mode 'a'
