@@ -31,7 +31,7 @@ def split_csv_to_windows(csv_path, output_dir, fs=100, window_sec=5):
     print(f"Created {created} files (up to {n_windows * 5:.0f}s)")
     return created
 
-def split_csv_in_memory(processed_df, fs=100, window_sec=5):
+def split_df_in_memory(processed_df, fs=100, window_sec=5):
     """Split one CSV → multiple 5s CSVs but keeps output in memory"""
     window_len = int(fs * window_sec)
 
@@ -161,7 +161,7 @@ def isolate_test_splits(seed: int = 42):
 
             print(f"    {activity}: {len(train_names)} training, {len(test_names)} testing")
 
-    print(f"INFO: Test splits randomly separated, seed {seed}.")
+    print(f"INFO: Test splits randomly separated.")
 
     return 0
 
@@ -221,4 +221,4 @@ def reorganize_split_group_by_recording(seed: int = 42) -> None:
             if activity in split_group:
                 del split_group[activity]
 
-    print("INFO: Reorganization by recording complete.")
+    print("INFO: Test splits isolated by recording.")

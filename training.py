@@ -1,4 +1,4 @@
-from extraction import *
+# from extraction import *
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
@@ -10,9 +10,9 @@ from sklearn.metrics import (
     accuracy_score, recall_score, confusion_matrix,
     ConfusionMatrixDisplay, roc_curve, RocCurveDisplay, roc_auc_score
 )
+import joblib
+from hdf import features_path, model_path
 
-# ── assumes these are already populated from your feature extraction code ──
-# features_train, labels_train, features_test, labels_test (all np.arrays)
 
 def train_classifier(classifier, name, features_train, labels_train, features_test, labels_test):
     """
@@ -27,19 +27,19 @@ def train_classifier(classifier, name, features_train, labels_train, features_te
     # Train
     pipeline.fit(features_train, labels_train) #normalizes data then trains model
 
-    # # Predict
-    # y_pred = pipeline.predict(features_test)
-    # y_prob = pipeline.predict_proba(features_test)[:, 1]  # Probability(jumping)
-    #
-    # # ── Metrics ──────────────────────────────────────────────
-    # acc     = accuracy_score(labels_test, y_pred)
-    # recall  = recall_score(labels_test, y_pred)   # sensitivity / TPR
-    # auc     = roc_auc_score(labels_test, y_prob)
-    #
-    # print(f"\n── {name} ──")
-    # print(f"  Accuracy : {acc:.4f}")
-    # print(f"  Recall   : {recall:.4f}")
-    # print(f"  AUC      : {auc:.4f}")
+    # Predict
+    y_pred = pipeline.predict(features_test)
+    y_prob = pipeline.predict_proba(features_test)[:, 1]  # Probability(jumping)
+
+    # ── Metrics ──────────────────────────────────────────────
+    acc     = accuracy_score(labels_test, y_pred)
+    recall  = recall_score(labels_test, y_pred)   # sensitivity / TPR
+    auc     = roc_auc_score(labels_test, y_prob)
+
+    print(f"\n── Model Trianing: {name} ──")
+    print(f"  Accuracy : {acc:.4f}")
+    print(f"  Recall   : {recall:.4f}")
+    print(f"  AUC      : {auc:.4f}")
     #
     # # ── Confusion Matrix ─────────────────────────────────────
     # cm = confusion_matrix(labels_test, y_pred)
@@ -60,34 +60,37 @@ def train_classifier(classifier, name, features_train, labels_train, features_te
 
     return pipeline  # return trained model in case you want to reuse it
 
+def run_training(model_type):
+    # Check if features exist using pathlib
+    if not features_path.exists():
+        print(f"ERROR: Run extraction first! '{features_path.name}' not found in appdata.")
+        return
 
-# ── Run three classifiers ─────────────────────────────────────────────────────
+    # Load the extracted features
+    data = np.load(features_path)
+    features_train = data['X_train']
+    labels_train = data['y_train']
+    features_test = data['X_test']
+    labels_test = data['y_test']
 
-# 1. Logistic Regression (shown directly in the slides) [file:240]
-lr_model = train_classifier(
-    LogisticRegression(max_iter=10000),
-    "Logistic Regression",
-    features_train, labels_train, features_test, labels_test
-)
+    print(f"INFO: Training {model_type} on {features_train.shape[0]} x {features_train.shape[1]} samples...")
 
-# print("Train shape:", features_train.shape)
-# print(features_train)
-# print("Test  shape:", features_test.shape)
-# print(features_test)
-#
-# print("Train labels:", np.unique(labels_train, return_counts=True))
-# print("Test  labels:", np.unique(labels_test, return_counts=True))
+    if model_type == 'lr':
+        model = LogisticRegression(max_iter=10000)
+        name = "Logistic Regression"
+    elif model_type == 'knn':
+        model = KNeighborsClassifier(n_neighbors=5)
+        name = "KNN k=5"
+    else:
+        print(f"ERROR: Unknown model type '{model_type}'")
+        return
 
-# # 2. K-Nearest Neighbours
-# knn_model = train_classifier(
-#     KNeighborsClassifier(n_neighbors=5),
-#     "KNN k=5",
-#     features_train, labels_train, features_test, labels_test
-# )
-#
-# # 3. Decision Tree
-# dt_model = train_classifier(
-#     DecisionTreeClassifier(max_depth=5, random_state=42),
-#     "Decision Tree",
-#     features_train, labels_train, features_test, labels_test
-# )
+    # Train and get the pipeline
+    trained_pipeline = train_classifier(
+        model, name,
+        features_train, labels_train, features_test, labels_test
+    )
+
+    # Save the trained model to disk!
+    joblib.dump(trained_pipeline, model_path)
+    print(f"INFO: Model traing successful, saved to disk. (Type: {model_type})")
