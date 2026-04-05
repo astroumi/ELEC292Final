@@ -10,7 +10,7 @@ from training import run_training
 from app import launch_app
 
 def default_run():
-    print("\n--- 1. Default Setup/Training ---")
+    print("\n--- 2. Default Setup/Training ---")
 
     if h5_path.exists():
         h5_path.unlink()
