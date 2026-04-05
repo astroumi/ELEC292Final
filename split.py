@@ -1,4 +1,3 @@
-from pathlib import Path
 from hdf import *
 import numpy as np
 
@@ -162,7 +161,7 @@ def isolate_test_splits(seed: int = 42):
             # Delete the original flat activity group not that all datasets are in training/testing
             del split_group[activity]
 
-            print(f"    {activity}: {len(train_names)} training, {len(test_names)} testing")
+            # print(f"    {activity}: {len(train_names)} training, {len(test_names)} testing")
 
     print(f"INFO: Test splits randomly separated.")
 

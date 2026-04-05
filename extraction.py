@@ -1,12 +1,8 @@
 import h5py
-import os
 import pandas as pd
 import numpy as np
 
 from hdf import h5_path, appdata_dir
-
-# from preprocessing import *
-from sklearn.preprocessing import StandardScaler
 
 #Calculates 10 features of a 5-second segment
 #Takes in a numpy array of [Time, X, Y, Z, Magnitude]
@@ -164,23 +160,3 @@ def run_extraction(mode="mag"):
 
     print(f"INFO: Feature extraction complete, saved to disk. (Mode: {mode})")
     return 0
-
-# Normalization
-# Initialize the scaler
-# scaler = StandardScaler()
-
-#Fit the scaler only the training data
-# scaler.fit(features_train)
-
-# #Normalize both sets using the training values
-# #This is z-scoring the features
-# features_train_scaled = scaler.transform(features_train)
-# features_test_scaled = scaler.transform(features_test)
-#
-#     #Save the fitted scaler to disk
-#     joblib.dump(scaler, 'scaler.pkl')
-#
-#     #Print to check that it worked
-#     print("Normalization Completed")
-#     print(f"Mean of first training feature after scaling: {features_train_scaled[:,0].mean():.2f}") # Should be ~0
-#     print(f"Std of first training feature after scaling: {features_train_scaled[:,0].std():.2f}")  # Should be ~1

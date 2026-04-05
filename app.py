@@ -1,14 +1,10 @@
 import tkinter as tk
-from tkinter import ttk
 from tkinter import filedialog
 import joblib
-import numpy as np
 import pandas as pd
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from pathlib import Path
 
-# from training import *
-from hdf import appdata_dir, model_path, features_path
+from hdf import model_path, features_path
 from preprocessing import process_app
 from extraction import extract_features, extract_mxyz
 from split import split_df_in_memory
@@ -65,19 +61,19 @@ def check ():
         answer_string.set("Processing...")
         print(f"INFO: Processing {selected_filename}.")
 
-        # 1. Preprocess data
+        # Preprocess data
         processed_df = process_app(selected_filename)
 
-        # 2. Split the dataframe into 5-second windows
+        # Split df into 5s windows
         windows = split_df_in_memory(processed_df)
 
-        # 3. Check file length
+        # Check file length
         if len(windows) == 0:
             answer_string.set("Error: File < 5s")
             print("Error: CSV file must contain at least 5 seconds of data.")
             return None
 
-        # 4. Extract features with appropriate shape
+        # Extract features with appropriate shape (based on extraction method)
         all_features = []
         if (features_path).exists():
             for window_data in windows:
@@ -87,10 +83,10 @@ def check ():
             print("ERROR: No feature extraction file found to determine mode.")
             return None
 
-        # 5. Predict using preloaded model
+        # Predict using preloaded model
         predictions = classifier_model.predict(all_features)
 
-        # 6. Export results and plot in app
+        # Export results and plot in app
         save_results_to_csv(predictions)
         plot_app_results_embedded(selected_filename, predictions, plot_frame)
         answer_string.set("Analysis Complete:")
@@ -116,7 +112,7 @@ def save_results_to_csv(predictions, window_sec=5):
             'label': label
         })
 
-        #Save as  filename + _predictions
+        #Save as  filename_predictions
         raw_name = Path(selected_filename).stem
         suggested_name = f"{raw_name}_predictions"
 
@@ -128,7 +124,7 @@ def save_results_to_csv(predictions, window_sec=5):
         defaultextension='.csv',
         #Suggest a file name
         initialfile=suggested_name,
-        #Restricts the file browser to only show CSV files so users can't save it to the wrong format
+        #Restricts file browser to only show CSV files so users can't save wrong format
         filetypes=[('CSV files', '*.csv')]
     )
 
@@ -149,6 +145,8 @@ def clear():
         plot.destroy()
 
 def launch_app():
+    # THIS FUNCTION CONFIGURES THE TKINTER APP WINDOW AND LAUNCHES IT
+
     global file_string, answer_string, plot_frame
 
     #Window
@@ -158,12 +156,13 @@ def launch_app():
     window.configure(bg='#0d0d0d')
     window.resizable(True, True)
 
+    # MAKES APP LAUNCH IN FOREGROUND
     window.lift()
     window.attributes('-topmost', True)
     window.after(50, lambda: window.attributes('-topmost', False))
     window.focus_force()
 
-    # Gracefully close and return to the terminal menu
+    # Nicely close and return to the terminal menu
     def on_closing():
         print("Closing application...")
         window.quit()
@@ -176,19 +175,19 @@ def launch_app():
     header = tk.Frame(master=window, bg='#0d0d0d')
     header.pack(fill='x', pady=(30,0))
 
-    tk.Label(master=header, text='M O T I O N',
-             font=('Helvetica', 38, 'bold'),
+    tk.Label(master=header, text='MOTION CLASSIFIER',
+             font=('Helvetica', 34, 'bold'),
              fg='#ff003c', bg='#0d0d0d').pack()
 
-    tk.Label(master=header, text='C L A S S I F I E R',
+    tk.Label(master=header, text='ELEC292 Final Project',
              font=('Helvetica', 16),
              fg='#ff003c', bg='#0d0d0d').pack()
 
-    tk.Label(master=header, text='======================',
+    tk.Label(master=header, text='------------------------------------------------------------',
              fg='#ff003c', bg='#0d0d0d').pack(pady=8)
 
-    tk.Label(master=header, text='A r e   y o u   w a l k i n g   o r   j u m p i n g ?',
-             font=('Helvetica', 9),
+    tk.Label(master=header, text='Are you walking or jumping?',
+             font=('Helvetica', 16),
              fg='white', bg='#0d0d0d').pack()
 
 
@@ -200,29 +199,30 @@ def launch_app():
     card.pack(fill='x')
 
     #File button
-    file_button = tk.Button(master=card, text='BROWSE FILES',
-                            font=('Helvetica', 12, 'bold'),
+    file_button = tk.Button(master=card, text='B R O W S E  F I L E S',
+                            font=('Helvetica', 16, 'bold'),
                             command=open_file,
-                            bg='#1a1a1a', fg='#ff003c',
+                            bg='#1a1a1a', fg='#0d0d0d',
                             activebackground='#ff003c', activeforeground='#0d0d0d',
-                            relief='flat', borderwidth=0,
+                            relief='raised', borderwidth=0,
                             padx=20, pady=12,
                             width=24)
     file_button.pack()
 
     #File label
     file_string = tk.StringVar()
-    file_label = tk.Label(master=card, font=('Helvetica', 7),
+    file_label = tk.Label(master=card, font=('Helvetica', 14),
                           textvariable=file_string,
                           fg='white', bg='#111111',
                           wraplength=420)
     file_label.pack(pady=8)
+    file_string.set('(File Path)')
 
     #Check button
     check_button = tk.Button(master=card, text='R U N   A N A L Y S I S',
-                             font=('Helvetica', 14, 'bold'),
+                             font=('Helvetica', 20, 'bold'),
                              command=check,
-                             bg='#ff003c', fg='#0d0d0d',
+                             bg='#ff003c', fg='#ff003c',
                              activebackground='#cc0030', activeforeground='#0d0d0d',
                              relief='flat', borderwidth=0,
                              padx=20, pady=16,
@@ -231,13 +231,13 @@ def launch_app():
 
     #Clear button
     clear_button = tk.Button(master=card, text='C L E A R',
-                             font=('Helvetica', 10, 'bold'),
+                             font=('Helvetica', 12, 'bold'),
                              command=clear,
                              bg='#1a1a1a', fg='#ff003c',
                              activebackground='#ff003c', activeforeground='#0d0d0d',
                              relief='flat', borderwidth=0,
                              padx=20, pady=8,
-                             width=24)
+                             width=14)
     clear_button.pack(pady=6)
 
 
@@ -247,25 +247,29 @@ def launch_app():
     output_frame = tk.Frame(master=window, bg='#0d0d0d')
     output_frame.pack(pady=5)
 
-    tk.Label(master=output_frame, text='=====  OUTPUT  =====',
-             font=('Helvetica', 9),
-             fg='#333333', bg='#0d0d0d').pack()
+    # tk.Label(master=output_frame, text='=====  OUTPUT  =====',
+    #          font=('Helvetica', 18),
+    #          fg='#333333', bg='#0d0d0d').pack()
+
 
     answer_string = tk.StringVar()
-    answer_string.set('_ _ _')
+    answer_string.set('Waiting for file...')
     answer_label = tk.Label(master=output_frame,
-                            font=('Helvetica', 42, 'bold'),
+                            font=('Helvetica', 20, 'bold'),
                             textvariable=answer_string,
                             fg='#ffffff', bg='#0d0d0d')
     answer_label.pack(pady=8)
 
-    tk.Label(master=output_frame, text='PREDICTION',
-             font=('Helvetica', 8),
-             fg='#ff003c', bg='#0d0d0d').pack()
 
     #### PLOT
     plot_frame = tk.Frame(master=window, bg='#0d0d0d')
     plot_frame.pack(fill='x', expand=True, padx = 20, pady=(0, 20))
 
+    # footer
+    footer = tk.Frame(master=window, bg='#0d0d0d')
+    footer.pack(side='bottom', fill='x', pady=10)
+
+    tk.Label(master=footer, text='Made by Umair and Kipras',
+             fg='#ff003c', bg='#0d0d0d').pack()
 
     window.mainloop()

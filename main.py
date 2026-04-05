@@ -1,11 +1,10 @@
-# main.py
+# Library imports
 import sys
-from pathlib import Path
 
-# Data pipeline imports
-from hdf import init_hdf5, h5_path, appdata_dir, features_path, model_path
+# Data and function imports from other files
+from hdf import init_hdf5, h5_path, features_path, model_path
 from preprocessing import preprocess_data
-from split import split_all, isolate_test_splits, reorganize_split_group_by_recording
+from split import split_all, isolate_test_splits
 from extraction import run_extraction
 from training import run_training
 from app import launch_app

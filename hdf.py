@@ -73,14 +73,3 @@ def init_hdf5():
                     split_activity_group.create_dataset(dataset_name, data=data_matrix)
     print("INFO: HDF5 Initialization Complete.")
     return 0
-
-
-### Prints the H5 tree so that we can visualize it
-def print_h5_tree(h5_path: str) -> None:
-    def _print(name, obj):
-        indent = "    " * name.count("/")
-        kind = "Group" if isinstance(obj, h5py.Group) else "Dataset"
-        print(f"{indent}{name} ({kind})")
-    with h5py.File(h5_path, "r") as f:
-        print(f"File: {h5_path}")
-        f.visititems(_print)
